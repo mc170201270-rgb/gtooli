@@ -125,122 +125,536 @@
       document.getElementById("qr-section").style.display = "block";
     }
 
-    const tools = [
-  { id: "simple-calc", name: "Simple Calculator", cat: "Calculators", icon: "🔢", desc: "A functional calculator with theme customization." }
-];
-    
-    // Basic Framework for loading future tools one-by-one
-    const tools = [];
-    const grid = document.getElementById("tools");
-    function renderTools() {
-      grid.innerHTML = tools.length === 0 ? '<p style="grid-column: 1/-1; text-align: center; color: #6b7280;">No tools added yet. Ready for your first custom tool!</p>' : '';
-    }
-    renderTools();
-// --- Simple Calculator Tool Logic ---
-function openTool(id) {
-  if (id === "simple-calc") {
-    document.getElementById("toolTitle").innerText = "Simple Calculator";
-    document.getElementById("toolDescription").innerText = "A fully functional calculator with color themes.";
-    document.getElementById("toolForm").innerHTML = `
-      <!-- Theme Controls Panel -->
-      <div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; justify-content: center; background: white; padding: 10px; border-radius: 10px; border: 1px solid #d1d5db;">
-        <span style="font-size: 13px; font-weight: bold; color: #4b5563;">Theme:</span>
-        <div class="color-dot active" onclick="setCalcColor('#4b5563', this)" style="width: 26px; height: 26px; border-radius: 50%; background: #4b5563; cursor: pointer; border: 2px solid #111827;"></div>
-        <div class="color-dot" onclick="setCalcColor('#1f2937', this)" style="width: 26px; height: 26px; border-radius: 50%; background: #1f2937; cursor: pointer; border: 2px solid transparent;"></div>
-        <div class="color-dot" onclick="setCalcColor('#e5e7eb', this)" style="width: 26px; height: 26px; border-radius: 50%; background: #e5e7eb; cursor: pointer; border: 2px solid transparent;"></div>
-        <div class="color-dot" onclick="setCalcColor('#10b981', this)" style="width: 26px; height: 26px; border-radius: 50%; background: #10b981; cursor: pointer; border: 2px solid transparent;"></div>
-        <div class="color-dot" onclick="setCalcColor('#3b82f6', this)" style="width: 26px; height: 26px; border-radius: 50%; background: #3b82f6; cursor: pointer; border: 2px solid transparent;"></div>
-      </div>
 
-      <!-- Calculator Body -->
-      <div id="calc-body-box" style="background-color: #4b5563; max-width: 320px; margin: auto; border-radius: 15px; padding: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transition: background-color 0.3s ease;">
-        <div id="calc-screen" style="background-color: #d1d5db; color: #111827; text-align: right; border-radius: 8px; padding: 10px; font-size: 32px; height: 50px; margin-bottom: 20px; overflow: hidden; border: 1px solid #9ca3af; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); font-family: monospace;">0</div>
-        
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <button onclick="pressKey('c')" style="background-color: #dc2626; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; padding: 16px 0; cursor: pointer;">AC</button>
-          <button onclick="pressKey('pm')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; padding: 16px 0; cursor: pointer;">±</button>
-          <button onclick="pressKey('%')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; padding: 16px 0; cursor: pointer;">%</button>
-          <button onclick="pressKey('divide')" style="background-color: #e5e7eb; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">÷</button>
-          
-          <button onclick="pressKey('7')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">7</button>
-          <button onclick="pressKey('8')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">8</button>
-          <button onclick="pressKey('9')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">9</button>
-          <button onclick="pressKey('multiply')" style="background-color: #e5e7eb; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">×</button>
-          
-          <button onclick="pressKey('4')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">4</button>
-          <button onclick="pressKey('5')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">5</button>
-          <button onclick="pressKey('6')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">6</button>
-          <button onclick="pressKey('minus')" style="background-color: #e5e7eb; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">-</button>
-          
-          <button onclick="pressKey('1')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">1</button>
-          <button onclick="pressKey('2')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">2</button>
-          <button onclick="pressKey('3')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">3</button>
-          <button onclick="pressKey('plus')" style="background-color: #e5e7eb; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">+</button>
-          
-          <button onclick="pressKey('0')" style="grid-column: span 2; background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">0</button>
-          <button onclick="pressKey('.')" style="background-color: #ffffff; color: #111827; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; padding: 16px 0; cursor: pointer;">.</button>
-          <button onclick="pressKey('=')" style="background-color: #f97316; color: white; border: none; border-radius: 8px; font-size: 22px; font-weight: bold; padding: 16px 0; cursor: pointer;">=</button>
-        </div>
-      </div>
-    `;
-    document.getElementById("output").hidden = true;
+<!-- GTooli Calculator: Copy and paste this entire code into index.html -->
+
+<style>
+  #gtooli-calculator,
+  #gtooli-calculator * {
+    box-sizing: border-box;
   }
-}
 
-let calcVal = '0';
-let calcFirst = null;
-let calcOp = null;
-let waitSecond = false;
+  #gtooli-calculator {
+    --calc-body: #5b5b60;
+    --calc-button: #f5f5f5;
+    --calc-button-text: #333333;
+    --calc-display: #cbd0dc;
+    --calc-accent: #f28c28;
+    --calc-text: #ffffff;
 
-function setCalcColor(color, el) {
-  document.getElementById('calc-body-box').style.backgroundColor = color;
-  document.querySelectorAll('.color-dot').forEach(d => d.style.borderColor = 'transparent');
-  el.style.borderColor = '#111827';
-}
+    width: 100%;
+    max-width: 235px;
+    margin: 24px auto;
+    padding: 17px;
+    border-radius: 23px;
+    background: var(--calc-body);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 0 rgba(0,0,0,0.18);
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--calc-text);
+    transition: background 0.25s ease;
+  }
 
-function pressKey(key) {
-  const screenEl = document.getElementById('calc-screen');
-  if (!screenEl) return;
+  #gtooli-calculator .calc-heading {
+    margin: 0 0 12px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 700;
+  }
 
-  if (!isNaN(key)) {
-    if (waitSecond) {
-      calcVal = key;
-      waitSecond = false;
+  #gtooli-calculator .calc-display {
+    width: 100%;
+    height: 47px;
+    margin-bottom: 19px;
+    padding: 5px 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 7px;
+    background: var(--calc-display);
+    color: #222222;
+    text-align: right;
+    font-family: "Courier New", monospace;
+    font-size: 31px;
+    font-weight: 500;
+    line-height: 35px;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  #gtooli-calculator .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  #gtooli-calculator .calc-btn {
+    min-width: 0;
+    height: 41px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: var(--calc-button);
+    color: var(--calc-button-text);
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.14);
+    transition: transform 0.08s, filter 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #gtooli-calculator .calc-btn:hover {
+    filter: brightness(0.91);
+  }
+
+  #gtooli-calculator .calc-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.14);
+  }
+
+  #gtooli-calculator .calc-btn.operator {
+    background: #eeeeee;
+  }
+
+  #gtooli-calculator .calc-btn.equals {
+    background: var(--calc-accent);
+    color: #ffffff;
+  }
+
+  #gtooli-calculator .calc-btn.utility {
+    font-size: 19px;
+  }
+
+  #gtooli-calculator .calc-themes {
+    margin-top: 18px;
+  }
+
+  #gtooli-calculator .calc-theme-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  #gtooli-calculator .calc-theme-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 7px;
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  #gtooli-calculator .calc-theme-select option {
+    background: #ffffff;
+    color: #222222;
+  }
+
+  #gtooli-calculator .calc-hint {
+    margin: 10px 0 0;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+    font-size: 10px;
+  }
+
+  @media (max-width: 360px) {
+    #gtooli-calculator {
+      max-width: 225px;
+      padding: 14px;
+    }
+
+    #gtooli-calculator .calc-btn {
+      height: 39px;
+      font-size: 25px;
+    }
+  }
+</style>
+
+<div id="gtooli-calculator" role="group" aria-label="GTooli calculator">
+  <h3 class="calc-heading">Calculator</h3>
+
+  <div
+    id="gtooli-display"
+    class="calc-display"
+    role="status"
+    aria-live="polite"
+    aria-label="Calculator display"
+  >0</div>
+
+  <div class="calc-grid">
+    <button type="button" class="calc-btn" data-action="digit" data-value="7">7</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="8">8</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="9">9</button>
+    <button type="button" class="calc-btn operator" data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+
+    <button type="button" class="calc-btn" data-action="digit" data-value="4">4</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="5">5</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="6">6</button>
+    <button type="button" class="calc-btn operator" data-action="operator" data-value="×" aria-label="Multiply">×</button>
+
+    <button type="button" class="calc-btn" data-action="digit" data-value="1">1</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="2">2</button>
+    <button type="button" class="calc-btn" data-action="digit" data-value="3">3</button>
+    <button type="button" class="calc-btn operator" data-action="operator" data-value="−" aria-label="Subtract">−</button>
+
+    <button type="button" class="calc-btn" data-action="digit" data-value="0">0</button>
+    <button type="button" class="calc-btn" data-action="decimal" aria-label="Decimal point">.</button>
+    <button type="button" class="calc-btn operator" data-action="operator" data-value="+" aria-label="Add">+</button>
+    <button type="button" class="calc-btn equals" data-action="equals" aria-label="Calculate result">=</button>
+
+    <button type="button" class="calc-btn utility" data-action="clear">C</button>
+    <button type="button" class="calc-btn utility" data-action="backspace" aria-label="Backspace">⌫</button>
+    <button type="button" class="calc-btn utility" data-action="sign" aria-label="Change sign">±</button>
+    <button type="button" class="calc-btn utility" data-action="percent">%</button>
+  </div>
+
+  <div class="calc-themes">
+    <label class="calc-theme-label" for="gtooli-theme">Calculator color</label>
+    <select id="gtooli-theme" class="calc-theme-select">
+      <option value="default">Classic Gray</option>
+      <option value="blue">Ocean Blue</option>
+      <option value="green">Forest Green</option>
+      <option value="purple">Royal Purple</option>
+      <option value="red">Ruby Red</option>
+      <option value="black">Midnight Black</option>
+      <option value="light">Light Silver</option>
+    </select>
+  </div>
+
+  <p class="calc-hint">Use your keyboard or click the buttons</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const root = document.getElementById("gtooli-calculator");
+  if (!root || root.dataset.initialized === "true") return;
+  root.dataset.initialized = "true";
+
+  const display = root.querySelector("#gtooli-display");
+  const themeSelect = root.querySelector("#gtooli-theme");
+
+  let current = "0";
+  let stored = null;
+  let pending = null;
+  let waiting = false;
+  let justCalculated = false;
+
+  const themes = {
+    default: {
+      body: "#5b5b60",
+      button: "#f5f5f5",
+      buttonText: "#333333",
+      display: "#cbd0dc",
+      accent: "#f28c28",
+      text: "#ffffff"
+    },
+    blue: {
+      body: "#174b70",
+      button: "#e5f3ff",
+      buttonText: "#173b55",
+      display: "#c4e5fa",
+      accent: "#00a8e8",
+      text: "#ffffff"
+    },
+    green: {
+      body: "#286247",
+      button: "#e5f5e9",
+      buttonText: "#214a31",
+      display: "#c8e5cd",
+      accent: "#f2a93b",
+      text: "#ffffff"
+    },
+    purple: {
+      body: "#563d79",
+      button: "#f1e8ff",
+      buttonText: "#392454",
+      display: "#ddd0f2",
+      accent: "#ff9dcb",
+      text: "#ffffff"
+    },
+    red: {
+      body: "#8c3038",
+      button: "#fff0ef",
+      buttonText: "#5c2025",
+      display: "#f3d0ce",
+      accent: "#ffad42",
+      text: "#ffffff"
+    },
+    black: {
+      body: "#202124",
+      button: "#3c4043",
+      buttonText: "#ffffff",
+      display: "#d9dde5",
+      accent: "#f28c28",
+      text: "#ffffff"
+    },
+    light: {
+      body: "#d8dbe2",
+      button: "#ffffff",
+      buttonText: "#252525",
+      display: "#ffffff",
+      accent: "#3478db",
+      text: "#222222"
+    }
+  };
+
+  function applyTheme(name) {
+    const theme = themes[name] || themes.default;
+    const styles = {
+      "--calc-body": theme.body,
+      "--calc-button": theme.button,
+      "--calc-button-text": theme.buttonText,
+      "--calc-display": theme.display,
+      "--calc-accent": theme.accent,
+      "--calc-text": theme.text
+    };
+
+    Object.keys(styles).forEach(function (key) {
+      root.style.setProperty(key, styles[key]);
+    });
+  }
+
+  function formatNumber(number) {
+    if (!Number.isFinite(number)) return "Error";
+    if (Object.is(number, -0)) number = 0;
+
+    // Avoid long floating-point results such as 0.30000000000000004.
+    const rounded = Number(number.toPrecision(12));
+    let result = String(rounded);
+
+    // Use scientific notation only for extremely long values.
+    if (result.length > 15) {
+      result = rounded.toExponential(6);
+    }
+
+    return result;
+  }
+
+  function updateDisplay() {
+    display.textContent = current;
+    display.title = current;
+  }
+
+  function reset() {
+    current = "0";
+    stored = null;
+    pending = null;
+    waiting = false;
+    justCalculated = false;
+    updateDisplay();
+  }
+
+  function inputDigit(digit) {
+    if (current === "Error" || waiting || justCalculated) {
+      current = digit;
+      waiting = false;
+      justCalculated = false;
+    } else if (current === "0") {
+      current = digit;
+    } else if (current === "-0") {
+      current = "-" + digit;
+    } else if (current.replace("-", "").replace(".", "").length < 14) {
+      current += digit;
+    }
+
+    updateDisplay();
+  }
+
+  function inputDecimal() {
+    if (current === "Error" || waiting || justCalculated) {
+      current = "0.";
+      waiting = false;
+      justCalculated = false;
+    } else if (!current.includes(".")) {
+      current += ".";
+    }
+
+    updateDisplay();
+  }
+
+  function calculate(a, b, operator) {
+    switch (operator) {
+      case "+": return a + b;
+      case "−": return a - b;
+      case "×": return a * b;
+      case "÷": return b === 0 ? NaN : a / b;
+      default: return b;
+    }
+  }
+
+  function inputOperator(operator) {
+    if (current === "Error") reset();
+
+    const value = Number(current);
+
+    if (pending && !waiting) {
+      const result = calculate(stored, value, pending);
+      current = formatNumber(result);
+
+      if (current === "Error") {
+        stored = null;
+        pending = null;
+        waiting = true;
+        justCalculated = true;
+        updateDisplay();
+        return;
+      }
+
+      stored = Number(current);
     } else {
-      calcVal = calcVal === '0' ? key : calcVal + key;
+      stored = value;
     }
-  } else if (key === '.') {
-    if (!calcVal.includes('.')) calcVal += '.';
-  } else if (['plus', 'minus', 'multiply', 'divide'].includes(key) || key === '+' || key === '-' || key === '×' || key === '÷') {
-    const opMap = {'+':'plus', '-':'minus', '×':'multiply', '÷':'divide'};
-    calcFirst = parseFloat(calcVal);
-    calcOp = opMap[key] || key;
-    waitSecond = true;
-  } else if (key === '=') {
-    if (calcOp && calcFirst !== null) {
-      const second = parseFloat(calcVal);
-      let res = 0;
-      if (calcOp === 'plus') res = calcFirst + second;
-      if (calcOp === 'minus') res = calcFirst - second;
-      if (calcOp === 'multiply') res = calcFirst * second;
-      if (calcOp === 'divide') res = second === 0 ? 'Error' : calcFirst / second;
-      calcVal = res.toString();
-      calcFirst = null;
-      calcOp = null;
-      waitSecond = true;
-    }
-  } else if (key === 'c') {
-    calcVal = '0';
-    calcFirst = null;
-    calcOp = null;
-    waitSecond = false;
-  } else if (key === 'pm') {
-    calcVal = (parseFloat(calcVal) * -1).toString();
-  } else if (key === '%') {
-    calcVal = (parseFloat(calcVal) / 100).toString();
+
+    pending = operator;
+    waiting = true;
+    justCalculated = false;
+    updateDisplay();
   }
-  screenEl.innerText = calcVal;
-}
+
+  function equals() {
+    if (pending === null || stored === null || waiting) return;
+
+    const result = calculate(stored, Number(current), pending);
+    current = formatNumber(result);
+    stored = null;
+    pending = null;
+    waiting = true;
+    justCalculated = true;
+    updateDisplay();
+  }
+
+  function inputPercent() {
+    if (current === "Error") return;
+
+    const value = Number(current);
+    current = formatNumber(value / 100);
+    waiting = false;
+    justCalculated = false;
+    updateDisplay();
+  }
+
+  function toggleSign() {
+    if (current === "Error" || Number(current) === 0) return;
+
+    current = current.startsWith("-")
+      ? current.slice(1)
+      : "-" + current;
+
+    justCalculated = false;
+    updateDisplay();
+  }
+
+  function backspace() {
+    if (current === "Error" || waiting || justCalculated) {
+      current = "0";
+      waiting = false;
+      justCalculated = false;
+    } else if (current.length > 1) {
+      current = current.slice(0, -1);
+      if (current === "-") current = "0";
+    } else {
+      current = "0";
+    }
+
+    updateDisplay();
+  }
+
+  root.querySelector(".calc-grid").addEventListener("click", function (event) {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const value = button.dataset.value;
+
+    switch (action) {
+      case "digit":
+        inputDigit(value);
+        break;
+      case "decimal":
+        inputDecimal();
+        break;
+      case "operator":
+        inputOperator(value);
+        break;
+      case "equals":
+        equals();
+        break;
+      case "clear":
+        reset();
+        break;
+      case "backspace":
+        backspace();
+        break;
+      case "sign":
+        toggleSign();
+        break;
+      case "percent":
+        inputPercent();
+        break;
+    }
+  });
+
+  themeSelect.addEventListener("change", function () {
+    applyTheme(themeSelect.value);
+  });
+
+  // Keyboard controls work when the calculator is visible on the page.
+  document.addEventListener("keydown", function (event) {
+    if (!root.isConnected) return;
+
+    // Do not intercept typing inside other form fields.
+    const target = event.target;
+    if (
+      target &&
+      (target.isContentEditable ||
+       /INPUT|TEXTAREA|SELECT/.test(target.tagName))
+    ) return;
+
+    // Ignore modified shortcuts such as Ctrl+C and Alt combinations.
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    if (/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+      inputDigit(event.key);
+    } else if (event.key === ".") {
+      event.preventDefault();
+      inputDecimal();
+    } else if (event.key === "+") {
+      event.preventDefault();
+      inputOperator("+");
+    } else if (event.key === "-") {
+      event.preventDefault();
+      inputOperator("−");
+    } else if (event.key === "*") {
+      event.preventDefault();
+      inputOperator("×");
+    } else if (event.key === "/") {
+      event.preventDefault();
+      inputOperator("÷");
+    } else if (event.key === "Enter" || event.key === "=") {
+      event.preventDefault();
+      equals();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      reset();
+    } else if (event.key === "Backspace") {
+      event.preventDefault();
+      backspace();
+    } else if (event.key === "%") {
+      event.preventDefault();
+      inputPercent();
+    }
+  });
+
+  applyTheme("default");
+  updateDisplay();
+})();
+</script>
 
 
     
