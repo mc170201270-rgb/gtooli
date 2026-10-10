@@ -70,6 +70,61 @@ footer a{margin:0 8px}
   <p>Simple, accessible utilities for everyday tasks. Most tools run directly in your browser, without uploading your text to a server.</p>
   <p class="small">Always check your results before using them for important work.</p>
 </section>
+  <!-- Appreciate / Support Widget Container -->
+<div style="max-width: 450px; margin: 40px auto; padding: 24px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+  <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #111827;">❤️ Appreciate GTooli?</h3>
+  <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563;">Support independent developer tools with a small tip.</p>
+
+  <!-- Currency Preset Buttons -->
+  <div id="preset-buttons" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;">
+    <!-- Populated dynamically via script below -->
+  </div>
+
+  <!-- Custom Amount Input -->
+  <div style="margin-bottom: 16px;">
+    <input type="number" id="custom-amount" placeholder="Or enter custom amount" style="width: 100%; max-width: 280px; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; text-align: center; box-sizing: border-box;" />
+  </div>
+
+  <!-- Proceed Button -->
+  <button onclick="revealQR()" style="background-color: #10b981; color: white; border: none; padding: 10px 24px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; max-width: 280px;">Proceed to Support</button>
+
+  <!-- Hidden QR Section (Revealed on click) -->
+  <div id="qr-section" style="display: none; margin-top: 20px; border-top: 1px dashed #e5e7eb; padding-top: 16px;">
+    <p id="selected-msg" style="font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 10px;"></p>
+    <img src="zindgi-qr.png" alt="Zindgi QR Code" style="width: 160px; height: 160px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; background: #fff;" />
+    <p style="font-size: 12px; color: #6b7280; margin-top: 8px;">Scan using your Zindgi or local banking app to complete support.</p>
+  </div>
+</div>
+
+<!-- Dynamic Currency & Interaction Script -->
+<script>
+  // Detect if user is likely in Pakistan based on locale/language settings
+  const userLang = navigator.language || navigator.userLanguage || "";
+  const isPakistan = userLang.includes("PK") || userLang.includes("ur") || Intl.DateTimeFormat().resolvedOptions().timeZone.includes("Karachi");
+
+  const currencySymbol = isPakistan ? "Rs. " : "$";
+  const defaultPresets = isPakistan ? [100, 500, 1000] : [3, 5, 10];
+
+  // Render presets dynamically
+  const presetContainer = document.getElementById("preset-buttons");
+  defaultPresets.forEach(val => {
+    const btn = document.createElement("button");
+    btn.innerText = currencySymbol + val;
+    btn.style.cssText = "flex: 1; padding: 8px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;";
+    btn.onclick = () => {
+      document.getElementById("custom-amount").value = val;
+    };
+    presetContainer.appendChild(btn);
+  });
+
+  function revealQR() {
+    const amountInput = document.getElementById("custom-amount").value;
+    const finalAmount = amountInput ? amountInput : defaultPresets[1]; // fallback to middle preset
+    
+    document.getElementById("selected-msg").innerText = `Scan to send ${currencySymbol}${finalAmount} via Zindgi:`;
+    document.getElementById("qr-section").style.display = "block";
+  }
+</script>
 </main>
 <footer>
   <div>© <span id="year"></span> GTooli</div>
