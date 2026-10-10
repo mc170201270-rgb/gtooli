@@ -1,246 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="GTooli offers free online word counting, text cleaning, JSON formatting, URL encoding, calculators, converters and password generation tools.">
-<title>GTooli — Free Online Tools</title>
-<style>
-:root{--blue:#4255e8;--ink:#182238;--muted:#647087;--line:#e5e9f2;--bg:#f7f8fc}
-*{box-sizing:border-box}
-body{margin:0;font:16px Arial,sans-serif;color:var(--ink);background:var(--bg)}
-header{background:white;border-bottom:1px solid var(--line);padding:18px 6%}
-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.logo{font-size:23px;font-weight:800;color:var(--blue);text-decoration:none}
-a{color:var(--blue);text-decoration:none}
-main{max-width:1100px;margin:auto;padding:40px 20px}
-.hero{text-align:center;padding:35px 0}
-.hero h1{font-size:clamp(32px,5vw,48px);margin:0 0 14px}
-.hero p{color:var(--muted);line-height:1.7}
-.search{width:min(600px,100%);padding:16px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin:18px 0}
-.filters{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:10px 0 30px}
-button,.tool-card{cursor:pointer}
-.filters button,.action{border:0;border-radius:9px;padding:11px 15px;background:white;color:var(--ink);font-size:14px}
-.filters button.active,.action{background:var(--blue);color:white}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.tool-card{background:white;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:left;transition:.15s}
-.tool-card:hover{transform:translateY(-3px);border-color:var(--blue)}
-.tool-card .emoji{font-size:28px}
-.tool-card h3{margin:12px 0 8px}
-.tool-card p{color:var(--muted);line-height:1.5;font-size:14px}
-.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}
-.panel[hidden]{display:none}
-input,textarea,select{width:100%;padding:12px;border:1px solid #ccd3e0;border-radius:8px;font:inherit;margin:8px 0 14px}
-textarea{min-height:130px;resize:vertical}
-label{font-weight:600;font-size:14px}
-.action{margin:4px 6px 4px 0}
-.result{background:#f0f3ff;border-radius:8px;padding:14px;line-height:1.7;overflow-wrap:anywhere}
-footer{text-align:center;padding:30px 16px;color:var(--muted);line-height:2}
-footer a{margin:0 8px}
-.small{font-size:13px;color:var(--muted)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTooli — Free Online Tools</title>
+  <style>
+    :root {
+      --blue: #10B981; 
+      --ink: #111827; 
+      --muted: #4B5563; 
+      --line: #E5E7EB; 
+      --bg: #F9FAFB;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: sans-serif; color: var(--ink); background: var(--bg); }
+    header { background: white; border-bottom: 1px solid var(--line); padding: 18px 6%; }
+    nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .logo { font-size: 23px; font-weight: 800; color: var(--blue); text-decoration: none; }
+    main { max-width: 1100px; margin: auto; padding: 40px 20px; }
+    .hero { text-align: center; padding: 35px 0; }
+    .hero h1 { font-size: clamp(32px, 5vw, 48px); margin: 0 0 14px; }
+    .hero p { color: var(--muted); line-height: 1.7; }
+    .search { width: min(600px, 100%); padding: 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 16px; margin: 18px 0; }
+    .filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 10px 0 30px; }
+    .filters button, .action { border: 0; border-radius: 9px; padding: 11px 15px; background: white; color: var(--ink); font-size: 14px; cursor: pointer; border: 1px solid var(--line); }
+    .filters button.active, .action { background: var(--blue); color: white; border-color: var(--blue); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .panel { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin: 28px 0; }
+    .panel [hidden] { display: none; }
+    input { width: 100%; padding: 12px; border: 1px solid #ccd3e0; border-radius: 8px; font: inherit; margin: 8px 0 14px; }
+    label { font-weight: 600; font-size: 14px; }
+    .result { background: #f0f3ff; border-radius: 8px; padding: 14px; line-height: 1.7; overflow-wrap: anywhere; }
+    footer { text-align: center; padding: 30px 16px; color: var(--muted); line-height: 2; }
+    footer a { margin: 0 8px; color: var(--blue); text-decoration: none; }
+  </style>
 </head>
 <body>
-<header><nav>
-  <a class="logo" href="./">GTooli</a>
-  <a href="#tools">Explore tools</a>
-</nav></header>
-<main>
-<section class="hero">
-  <h1>Everyday tools. Absolutely simple.</h1>
-  <p>Free online tools to write, calculate, clean text and get things done.</p>
-  <input id="search" class="search" type="search" placeholder="Search tools..." aria-label="Search tools">
-</section>
-<div class="filters" id="filters">
-  <button class="active" data-cat="All">All tools</button>
-  <button data-cat="Text">Text tools</button>
-  <button data-cat="Calculators">Calculators</button>
-  <button data-cat="Utilities">Utilities</button>
-  <button data-cat="Images">Image tools</button>
-  <button data-cat="Creator">Creator tools</button>
-</div>
-<section id="tools" class="grid" aria-label="Available tools"></section>
-<section class="panel" id="workspace" hidden>
-  <button class="action" id="back">← All tools</button>
-  <h2 id="toolTitle">Tool</h2><p id="toolDescription"></p><div id="toolForm"></div>
-  <div id="output" class="result" hidden aria-live="polite"></div>
-</section>
-<section class="panel">
-  <h2>Why use GTooli?</h2>
-  <p>Simple, accessible utilities for everyday tasks. Most tools run directly in your browser, without uploading your text to a server.</p>
-  <p class="small">Always check your results before using them for important work.</p>
-</section>
-  <!-- Appreciate / Support Widget Container -->
-<div style="max-width: 450px; margin: 40px auto; padding: 24px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-  <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #111827;">❤️ Appreciate GTooli?</h3>
-  <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563;">Support independent developer tools with a small tip.</p>
+  <header>
+    <nav>
+      <a class="logo" href="./">GTooli</a>
+    </nav>
+  </header>
 
-  <!-- Currency Preset Buttons -->
-  <div id="preset-buttons" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;">
-    <!-- Populated dynamically via script below -->
-  </div>
+  <main>
+    <section class="hero">
+      <h1>Everyday tools. Absolutely simple.</h1>
+      <p>Clean, fast web utilities built for your daily workflow.</p>
+      <input id="search" class="search" type="search" placeholder="Search tools..." aria-label="Search tools">
+    </section>
 
-  <!-- Custom Amount Input -->
-  <div style="margin-bottom: 16px;">
-    <input type="number" id="custom-amount" placeholder="Or enter custom amount" style="width: 100%; max-width: 280px; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; text-align: center; box-sizing: border-box;" />
-  </div>
+    <!-- Categories Filters -->
+    <div class="filters" id="filters">
+      <button class="active" data-cat="All">All tools</button>
+      <button data-cat="Calculators">Calculators</button>
+    </div>
 
-  <!-- Proceed Button -->
-  <button onclick="revealQR()" style="background-color: #10b981; color: white; border: none; padding: 10px 24px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; max-width: 280px;">Proceed to Support</button>
+    <!-- Tools Grid Area (Empty and ready for your new tools) -->
+    <section id="tools" class="grid" aria-label="Available tools"></section>
 
-  <!-- Hidden QR Section (Revealed on click) -->
-  <div id="qr-section" style="display: none; margin-top: 20px; border-top: 1px dashed #e5e7eb; padding-top: 16px;">
-    <p id="selected-msg" style="font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 10px;"></p>
-    <img src="zindgi-qr.png" alt="Zindgi QR Code" style="width: 160px; height: 160px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; background: #fff;" />
-    <p style="font-size: 12px; color: #6b7280; margin-top: 8px;">Scan using your Zindgi or local banking app to complete support.</p>
-  </div>
-</div>
+    <!-- Workspace Panel for Active Tool -->
+    <section class="panel" id="workspace" hidden>
+      <button class="action" id="back">← All tools</button>
+      <h2 id="toolTitle">Tool</h2>
+      <p id="toolDescription"></p>
+      <div id="toolForm"></div>
+      <div id="output" class="result" hidden aria-live="polite"></div>
+    </section>
 
-<!-- Dynamic Currency & Interaction Script -->
-<script>
-  // Detect if user is likely in Pakistan based on locale/language settings
-  const userLang = navigator.language || navigator.userLanguage || "";
-  const isPakistan = userLang.includes("PK") || userLang.includes("ur") || Intl.DateTimeFormat().resolvedOptions().timeZone.includes("Karachi");
+    <!-- Why use GTooli Section -->
+    <section class="panel">
+      <h2>Why use GTooli?</h2>
+      <p>Simple, accessible utilities for everyday tasks. Most tools run directly in your browser without tracking or uploading your data.</p>
+    </section>
 
-  const currencySymbol = isPakistan ? "Rs. " : "$";
-  const defaultPresets = isPakistan ? [100, 500, 1000] : [3, 5, 10];
+    <!-- Appreciate / Support Widget Container -->
+    <div style="max-width: 450px; margin: 40px auto; padding: 24px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+      <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #111827;">❤️ Appreciate GTooli?</h3>
+      <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563;">Support independent developer tools with a small tip.</p>
 
-  // Render presets dynamically
-  const presetContainer = document.getElementById("preset-buttons");
-  defaultPresets.forEach(val => {
-    const btn = document.createElement("button");
-    btn.innerText = currencySymbol + val;
-    btn.style.cssText = "flex: 1; padding: 8px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;";
-    btn.onclick = () => {
-      document.getElementById("custom-amount").value = val;
-    };
-    presetContainer.appendChild(btn);
-  });
+      <!-- Currency Preset Buttons -->
+      <div id="preset-buttons" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;"></div>
 
-  function revealQR() {
-    const amountInput = document.getElementById("custom-amount").value;
-    const finalAmount = amountInput ? amountInput : defaultPresets[1]; // fallback to middle preset
-    
-    document.getElementById("selected-msg").innerText = `Scan to send ${currencySymbol}${finalAmount} via Zindgi:`;
-    document.getElementById("qr-section").style.display = "block";
-  }
-</script>
-</main>
-<footer>
-  <div>© <span id="year"></span> GTooli</div>
-  <a href="about.html">About</a><a href="privacy.html">Privacy Policy</a><a href="contact.html">Contact</a>
-</footer>
-<script>
-const tools = [
- {id:"words",name:"Word Counter",cat:"Text",icon:"📝",desc:"Count words, characters and sentences."},
- {id:"case",name:"Case Converter",cat:"Text",icon:"🔠",desc:"Change capitalization in seconds."},
- {id:"duplicates",name:"Remove Duplicate Lines",cat:"Text",icon:"🧹",desc:"Remove repeated lines from text."},
- {id:"clean",name:"Text Cleaner",cat:"Text",icon:"✨",desc:"Remove extra spaces and tidy text."},
- {id:"slug",name:"Slug Generator",cat:"Text",icon:"🔗",desc:"Turn a title into a URL-friendly slug."},
- {id:"reverse",name:"Reverse Text",cat:"Text",icon:"↔️",desc:"Reverse the characters in your text."},
- {id:"linecount",name:"Line Counter",cat:"Text",icon:"📃",desc:"Count lines in pasted text."},
- {id:"percent",name:"Percentage Calculator",cat:"Calculators",icon:"％",desc:"Calculate a percentage of a number."},
- {id:"change",name:"Percentage Change",cat:"Calculators",icon:"📈",desc:"Calculate percentage increase or decrease."},
- {id:"discount",name:"Discount Calculator",cat:"Calculators",icon:"🏷️",desc:"Find the sale price and savings."},
- {id:"age",name:"Age Calculator",cat:"Calculators",icon:"🎂",desc:"Calculate age from your birth date."},
- {id:"bmi",name:"BMI Calculator",cat:"Calculators",icon:"⚖️",desc:"Estimate BMI using height and weight."},
- {id:"length",name:"Length Converter",cat:"Calculators",icon:"📏",desc:"Convert meters, kilometers, feet and miles."},
- {id:"password",name:"Password Generator",cat:"Utilities",icon:"🔐",desc:"Generate a random password locally."},
- {id:"json",name:"JSON Formatter",cat:"Utilities",icon:"{ }",desc:"Format or validate JSON text."},
- {id:"url",name:"URL Encoder / Decoder",cat:"Utilities",icon:"🌐",desc:"Encode or decode URL text."},
- {id:"imgcompress",name:"Image Compressor",cat:"Images",icon:"🗜️",desc:"Compress an image in your browser."},
- {id:"imgresize",name:"Image Resizer",cat:"Images",icon:"📐",desc:"Resize an image to new dimensions."},
- {id:"imgconvert",name:"Image Format Converter",cat:"Images",icon:"🖼️",desc:"Convert images to PNG, JPEG or WebP."},
- {id:"caption",name:"Instagram Caption Helper",cat:"Creator",icon:"📱",desc:"Create a caption draft from a topic and tone."},
- {id:"hashtags",name:"Hashtag Helper",cat:"Creator",icon:"#️⃣",desc:"Suggest relevant hashtags from a topic."},
- {id:"bio",name:"Social Bio Generator",cat:"Creator",icon:"✍️",desc:"Draft a short creator or business bio."},
- {id:"ytitles",name:"YouTube Title Ideas",cat:"Creator",icon:"▶️",desc:"Generate title ideas from your video topic."},
- {id:"postideas",name:"Social Post Ideas",cat:"Creator",icon:"💡",desc:"Brainstorm post ideas for a topic."}
-];
-let category="All", current=null;
-const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function renderCards(){
- const q=$("search").value.toLowerCase();
- $("tools").innerHTML=tools.filter(t=>(category==="All"||t.cat===category)&&(t.name+" "+t.desc+" "+t.cat).toLowerCase().includes(q)).map(t=>
- `<button class="tool-card" data-id="${t.id}"><span class="emoji">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p><span>Open tool →</span></button>`).join("");
-}
-$("search").addEventListener("input",renderCards);
-$("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-cat]");if(!b)return;category=b.dataset.cat;$("filters").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderCards();});
-$("tools").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)openTool(b.dataset.id);});
-$("back").onclick=()=>{$("workspace").hidden=true;$("tools").scrollIntoView({behavior:"smooth"});};
-$("year").textContent=new Date().getFullYear();
-function field(label,id,type="text",placeholder="",extra=""){return `<label for="${id}">${label}</label><input id="${id}" type="${type}" placeholder="${placeholder}" ${extra}>`;}
-function area(label,id,placeholder="Paste your text here"){return `<label for="${id}">${label}</label><textarea id="${id}" placeholder="${placeholder}"></textarea>`;}
-function btn(text="Calculate"){return `<button class="action" id="run">${text}</button>`;}
-function openTool(id){
- current=tools.find(t=>t.id===id);$("toolTitle").textContent=current.name;$("toolDescription").textContent=current.desc;$("output").hidden=true;let f="";
- switch(id){
- case "words":f=area("Your text","a")+btn("Count text");break;
- case "case":f=area("Your text","a")+`<label for="mode">Conversion</label><select id="mode"><option value="upper">UPPERCASE</option><option value="lower">lowercase</option><option value="title">Title Case</option><option value="sentence">Sentence case</option></select>`+btn("Convert text");break;
- case "duplicates":f=area("One item per line","a")+btn("Remove duplicates");break;
- case "clean":f=area("Your text","a")+btn("Clean text");break;
- case "percent":f=field("Percentage (%)","a","number","e.g. 15")+field("Number","b","number","e.g. 200")+btn();break;
- case "discount":f=field("Original price","a","number","e.g. 100")+field("Discount (%)","b","number","e.g. 20")+btn("Calculate sale price");break;
- case "age":f=field("Date of birth","a","date","")+btn("Calculate age");break;
- case "slug":f=area("Title or phrase","a")+btn("Generate slug");break;
- case "reverse":f=area("Your text","a")+btn("Reverse text");break;
- case "linecount":f=area("Your text","a")+btn("Count lines");break;
- case "change":f=field("Original value","a","number","e.g. 80")+field("New value","b","number","e.g. 100")+btn("Calculate change");break;
- case "bmi":f=field("Weight in kilograms","a","number","e.g. 70")+field("Height in centimeters","b","number","e.g. 175")+btn("Calculate BMI");break;
- case "length":f=field("Value","a","number","e.g. 5")+`<label for="fromUnit">From</label><select id="fromUnit"><option value="m">Meters</option><option value="km">Kilometers</option><option value="cm">Centimeters</option><option value="ft">Feet</option><option value="mi">Miles</option></select><label for="toUnit">To</label><select id="toUnit"><option value="km">Kilometers</option><option value="m">Meters</option><option value="cm">Centimeters</option><option value="ft">Feet</option><option value="mi">Miles</option></select>`+btn("Convert length");break;
- case "json":f=area("JSON input","a","Paste JSON here")+btn("Format JSON");break;
- case "url":f=area("Text or URL-encoded text","a")+`<label for="urlmode">Action</label><select id="urlmode"><option value="encode">Encode</option><option value="decode">Decode</option></select>`+btn("Convert");break;
- case "imgcompress":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*"><label for="quality">JPEG/WebP quality (0.1–1)</label><input id="quality" type="number" min="0.1" max="1" step="0.1" value="0.75"><p class="small">PNG compression may not reduce file size much. Images are processed in your browser.</p>`+btn("Compress image");break;
- case "imgresize":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*">`+field("Width in pixels","width","number","e.g. 800")+field("Height in pixels","height","number","e.g. 600")+`<label><input id="keepRatio" type="checkbox" checked style="width:auto;margin-right:8px">Keep aspect ratio</label><br>`+btn("Resize image");break;
- case "imgconvert":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*"><label for="format">Output format</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPEG</option><option value="image/webp">WebP</option></select>`+btn("Convert image");break;
- case "caption":f=field("Topic or post subject","a","text","e.g. easy healthy breakfast")+`<label for="tone">Tone</label><select id="tone"><option>Friendly</option><option>Funny</option><option>Professional</option><option>Inspirational</option></select>`+btn("Generate caption ideas");break;
- case "hashtags":f=field("Topic or niche","a","text","e.g. home workouts")+btn("Suggest hashtags");break;
- case "bio":f=field("Name or brand","a","text","e.g. Daily Fit Tips")+field("Niche / what you do","b","text","e.g. simple fitness advice")+btn("Generate bio");break;
- case "ytitles":f=field("Video topic","a","text","e.g. beginner meal prep")+btn("Generate title ideas");break;
- case "postideas":f=field("Topic or niche","a","text","e.g. personal finance")+btn("Generate post ideas");break;
- case "password":f=field("Password length (8–64)","a","number","16",'min="8" max="64" value="16"')+`<label><input id="symbols" type="checkbox" checked style="width:auto;margin-right:8px">Include symbols</label><br>`+btn("Generate password");break;
- }
- $("toolForm").innerHTML=f;$("workspace").hidden=false;$("workspace").scrollIntoView({behavior:"smooth",block:"start"});$("run").onclick=runTool;
-}
-function show(html){$("output").innerHTML=html;$("output").hidden=false;}
-function num(id){return Number($(id).value);}
-function runTool(){
- const a=$("a")?.value??"";
- switch(current.id){
- case "words":{const words=a.trim()?a.trim().split(/\s+/u).length:0;const chars=a.length,noSpaces=a.replace(/\s/g,"").length;const sentences=(a.match(/[.!?]+(?=\s|$)/g)||[]).length;show(`<b>Words:</b> ${words}<br><b>Characters:</b> ${chars}<br><b>Characters (no spaces):</b> ${noSpaces}<br><b>Sentences (approx.):</b> ${sentences}`);break;}
- case "case":{const mode=$("mode").value;let s=a;if(mode==="upper")s=a.toUpperCase();if(mode==="lower")s=a.toLowerCase();if(mode==="title")s=a.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(mode==="sentence")s=a.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
- case "duplicates":{const lines=a.split(/\r?\n/),seen=new Set();const result=lines.filter(line=>{const key=line.trim();if(!key||seen.has(key))return false;seen.add(key);return true;}).join("\n");show(`<textarea id="copyText">${esc(result)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
- case "clean":{const s=a.split(/\r?\n/).map(x=>x.replace(/[ \t]+/g," ").trim()).filter(Boolean).join("\n");show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
- case "percent":{const p=num("a"),v=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(p)||!Number.isFinite(v)){show("Enter valid numbers.");break;}show(`${p}% of ${v} = <b>${(p/100*v).toLocaleString(undefined,{maximumFractionDigits:6})}</b>`);break;}
- case "discount":{const price=num("a"),d=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(price)||!Number.isFinite(d)||price<0||d<0||d>100){show("Enter a non-negative price and a discount from 0 to 100%.");break;}show(`Sale price: <b>${(price*(1-d/100)).toFixed(2)}</b><br>You save: ${(price*d/100).toFixed(2)}`);break;}
- case "age":{const value=$("a").value,birth=new Date(value+"T00:00:00"),now=new Date();if(!value||Number.isNaN(birth.getTime())||birth>now){show("Enter a valid birth date in the past.");break;}let age=now.getFullYear()-birth.getFullYear();const beforeBirthday=now.getMonth()<birth.getMonth()||(now.getMonth()===birth.getMonth()&&now.getDate()<birth.getDate());if(beforeBirthday)age--;show(`Your age is <b>${age} years</b>.`);break;}
- case "slug":{const s=a.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");show(`<input id="copyText" value="${esc(s)}" readonly><button class="action" id="copy">Copy slug</button>`);bindCopy();break;}
- case "reverse":{const s=Array.from(a).reverse().join("");show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
- case "linecount":{const lines=a.length?a.split(/\r?\n/).length:0;show(`Lines: <b>${lines}</b><br>Non-empty lines: <b>${a.split(/\r?\n/).filter(x=>x.trim()).length}</b>`);break;}
- case "change":{const old=num("a"),next=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(old)||!Number.isFinite(next)||old===0){show("Enter valid values; original value must not be zero.");break;}const pct=((next-old)/Math.abs(old))*100;show(`Percentage change: <b>${pct.toFixed(2)}%</b><br>${pct>0?"Increase":pct<0?"Decrease":"No change"}`);break;}
- case "bmi":{const w=num("a"),h=num("b")/100;if($("a").value===""||$("b").value===""||!Number.isFinite(w)||!Number.isFinite(h)||w<=0||h<=0){show("Enter positive weight and height values.");break;}const bmi=w/(h*h);show(`Estimated BMI: <b>${bmi.toFixed(1)}</b><br><span class="small">BMI is a screening measure, not a diagnosis.</span>`);break;}
- case "length":{const factors={m:1,km:1000,cm:.01,ft:.3048,mi:1609.344};const v=num("a");if($("a").value===""||!Number.isFinite(v)){show("Enter a valid number.");break;}const result=v*factors[$("fromUnit").value]/factors[$("toUnit").value];show(`<b>${v} ${$("fromUnit").selectedOptions[0].text}</b> = ${result.toLocaleString(undefined,{maximumFractionDigits:8})} ${$("toUnit").selectedOptions[0].text}`);break;}
- case "json":{try{const obj=JSON.parse(a);const formatted=JSON.stringify(obj,null,2);show(`<textarea id="copyText">${esc(formatted)}</textarea><button class="action" id="copy">Copy formatted JSON</button>`);bindCopy();}catch(e){show("Invalid JSON: "+esc(e.message));}break;}
- case "url":{try{const s=$("urlmode").value==="encode"?encodeURIComponent(a):decodeURIComponent(a);show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();}catch(e){show("Could not decode this input. Check that percent-encoding is valid.");}break;}
- case "caption":{if(!a.trim()){show("Enter a topic first.");break;}const tone=$("tone").value;const drafts={
-"Friendly":[`Let's talk about ${a.trim()} 💛 What has your experience been? Share below!`,`A little reminder about ${a.trim()}: small steps count. Save this for later!`],
-"Funny":[`Me trying to master ${a.trim()} like it's a full-time job 😂 Who can relate?`,`Plot twist: ${a.trim()} doesn't have to be complicated. Send this to a friend!`],
-"Professional":[`A practical look at ${a.trim()}: focus on the basics, stay consistent, and adjust to your goals.`,`Here are a few things worth knowing about ${a.trim()}. Which would you add?`],
-"Inspirational":[`Your next step with ${a.trim()} doesn't need to be perfect. It just needs to begin. ✨`,`Progress is built one choice at a time. Keep going with ${a.trim()} 💫`]};
-show(`<textarea id="copyText">${esc(drafts[tone].join("\n\n"))}</textarea><button class="action" id="copy">Copy captions</button><p class="small">Template-based suggestions; personalize before posting.</p>`);bindCopy();break;}
- case "hashtags":{if(!a.trim()){show("Enter a topic first.");break;}const tags=a.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s]/g,"").trim().split(/\s+/).filter(Boolean);const base=[...new Set([...tags, tags.join(""),"tips","daily","community","learn","inspiration","howto","ideas","explore","creator"])].slice(0,15).map(t=>"#"+t.replace(/\s/g,""));show(`<textarea id="copyText">${esc(base.join(" "))}</textarea><button class="action" id="copy">Copy hashtags</button><p class="small">Hashtags are simple suggestions, not live trend data.</p>`);bindCopy();break;}
- case "bio":{const brand=a.trim(),niche=$("b").value.trim();if(!brand||!niche){show("Enter both a name/brand and a niche.");break;}const bios=[`${brand} | ${niche} ✨\nSharing tips, ideas & everyday inspiration.\nFollow along for more ↓`,`Welcome to ${brand} 💡\nMaking ${niche} easier, one post at a time.`,`Your daily dose of ${niche} 🌿\nUseful ideas • Simple tips • Real progress`];show(`<textarea id="copyText">${esc(bios.join("\n\n"))}</textarea><button class="action" id="copy">Copy bios</button>`);bindCopy();break;}
- case "ytitles":{if(!a.trim()){show("Enter a video topic first.");break;}const t=a.trim();const titles=[`How to Get Started With ${t}`,`${t}: 7 Things Beginners Should Know`,`I Tried ${t} — Here's What I Learned`,`The Simple Guide to ${t}`,`Stop Making These ${t} Mistakes`,`What Nobody Tells You About ${t}`,`${t} Made Easy: Step-by-Step`];show(`<textarea id="copyText">${esc(titles.join("\n"))}</textarea><button class="action" id="copy">Copy titles</button>`);bindCopy();break;}
- case "postideas":{if(!a.trim()){show("Enter a topic first.");break;}const t=a.trim();const ideas=[`5 common mistakes people make with ${t}`,`Beginner's checklist for ${t}`,`Myth vs. fact: ${t}`,`A step-by-step guide to ${t}`,`3 quick tips about ${t}`,`Things I wish I knew earlier about ${t}`,`Answer a frequently asked question about ${t}`,`A personal story or lesson related to ${t}`,`Tools and resources that help with ${t}`,`Ask your audience their biggest challenge with ${t}`];show(`<textarea id="copyText">${esc(ideas.join("\n"))}</textarea><button class="action" id="copy">Copy ideas</button>`);bindCopy();break;}
- case "imgcompress":
- case "imgresize":
- case "imgconvert":{const file=$("imageFile").files[0];if(!file){show("Choose an image file first.");break;}if(!file.type.startsWith("image/")){show("Please choose a valid image.");break;}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight;if(current.id==="imgresize"){const nw=Number($("width").value),nh=Number($("height").value);if(!Number.isInteger(nw)||!Number.isInteger(nh)||nw<1||nh<1||nw>10000||nh>10000){show("Enter dimensions from 1 to 10000 pixels.");return;}if($("keepRatio").checked){const ratio=Math.min(nw/w,nh/h);w=Math.max(1,Math.round(w*ratio));h=Math.max(1,Math.round(h*ratio));}else{w=nw;h=nh;}}const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d");if(current.id==="imgconvert"&&$("format").value==="image/jpeg"){ctx.fillStyle="#ffffff";ctx.fillRect(0,0,w,h);}ctx.drawImage(img,0,0,w,h);const type=current.id==="imgconvert"?$("format").value:(current.id==="imgcompress"?"image/jpeg":"image/png");const quality=current.id==="imgcompress"?Math.min(1,Math.max(.1,Number($("quality").value)||.75)):.85;canvas.toBlob(blob=>{if(!blob){show("Could not process this image format in your browser.");return;}const url=URL.createObjectURL(blob);const ext=type==="image/jpeg"?"jpg":type==="image/webp"?"webp":"png";show(`<p>Original: ${(file.size/1024).toFixed(1)} KB<br>Output: ${(blob.size/1024).toFixed(1)} KB<br>Dimensions: ${w} × ${h}</p><img src="${url}" alt="Processed image preview" style="max-width:100%;height:auto;border-radius:8px"><p><a class="action" style="display:inline-block" href="${url}" download="gtooli-image.${ext}">Download image</a></p><p class="small">Processing happens in your browser. Check the output before using it.</p>`);},type,quality);};img.onerror=()=>show("Could not read this image. Try another file.");img.src=reader.result;};reader.onerror=()=>show("Could not read the selected file.");reader.readAsDataURL(file);break;}
- case "password":{const length=num("a");if(!Number.isInteger(length)||length<8||length>64){show("Choose a whole number from 8 to 64.");break;}const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"+($("symbols").checked?"!@#$%&*-_+=":"");const bytes=new Uint32Array(length);crypto.getRandomValues(bytes);let s="";for(const n of bytes)s+=chars[n%chars.length];show(`<p>Your password:</p><input id="copyText" value="${esc(s)}" readonly><button class="action" id="copy">Copy password</button><p class="small">Save your password securely. Do not reuse it across accounts.</p>`);bindCopy();break;}
- }
-}
-function bindCopy(){$("copy").onclick=()=>navigator.clipboard.writeText($("copyText").value).then(()=>alert("Copied!")).catch(()=>alert("Select and copy manually."));}
-renderCards();
-</script>
+      <!-- Custom Amount Input -->
+      <div style="margin-bottom: 16px;">
+        <input type="number" id="custom-amount" placeholder="Or enter custom amount" style="width: 100%; max-width: 280px; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; text-align: center; box-sizing: border-box;" />
+      </div>
+
+      <!-- Proceed Button -->
+      <button onclick="revealQR()" style="background-color: #10b981; color: white; border: none; padding: 10px 24px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; max-width: 280px;">Proceed to Support</button>
+
+      <!-- Hidden QR Section -->
+      <div id="qr-section" style="display: none; margin-top: 20px; border-top: 1px dashed #e5e7eb; padding-top: 16px;">
+        <p id="selected-msg" style="font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 10px;"></p>
+        <img src="zindgi-qr.png" alt="Zindgi QR Code" style="width: 160px; height: 160px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; background: #fff;" />
+        <p style="font-size: 12px; color: #6b7280; margin-top: 8px;">Scan using your Zindgi or local banking app to complete support.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 GTooli</p>
+  </footer>
+
+  <!-- Appreciate Widget Script -->
+  <script>
+    const userLang = navigator.language || navigator.userLanguage || "";
+    const isPakistan = userLang.includes("PK") || userLang.includes("ur") || Intl.DateTimeFormat().resolvedOptions().timeZone.includes("Karachi");
+    const currencySymbol = isPakistan ? "Rs. " : "$";
+    const defaultPresets = isPakistan ? [100, 500, 1000] : [3, 5, 10];
+
+    const presetContainer = document.getElementById("preset-buttons");
+    defaultPresets.forEach(val => {
+      const btn = document.createElement("button");
+      btn.innerText = currencySymbol + val;
+      btn.style.cssText = "flex: 1; padding: 8px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;";
+      btn.onclick = () => { document.getElementById("custom-amount").value = val; };
+      presetContainer.appendChild(btn);
+    });
+
+    function revealQR() {
+      const amountInput = document.getElementById("custom-amount").value;
+      const finalAmount = amountInput ? amountInput : defaultPresets[1];
+      document.getElementById("selected-msg").innerText = `Scan to send ${currencySymbol}${finalAmount} via Zindgi:`;
+      document.getElementById("qr-section").style.display = "block";
+    }
+
+    // Basic Framework for loading future tools one-by-one
+    const tools = [];
+    const grid = document.getElementById("tools");
+    function renderTools() {
+      grid.innerHTML = tools.length === 0 ? '<p style="grid-column: 1/-1; text-align: center; color: #6b7280;">No tools added yet. Ready for your first custom tool!</p>' : '';
+    }
+    renderTools();
+  </script>
 </body>
 </html>
