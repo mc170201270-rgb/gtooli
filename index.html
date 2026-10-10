@@ -657,7 +657,182 @@
 </script>
 
 
-    
+   // Full Calculator Suite Data & Handlers
+    const tools = [
+      { id: "percentage", name: "Percentage Calculator", cat: "Calculators", icon: "％", desc: "Calculate a percentage of a number." },
+      { id: "percentage-change", name: "Percentage Change", cat: "Calculators", icon: "📈", desc: "Calculate percentage increase or decrease." },
+      { id: "discount", name: "Discount Calculator", cat: "Calculators", icon: "🏷️", desc: "Find the sale price and savings." },
+      { id: "age", name: "Age Calculator", cat: "Calculators", icon: "🎂", desc: "Calculate age from your birth date." },
+      { id: "bmi", name: "BMI Calculator", cat: "Calculators", icon: "⚖️", desc: "Estimate BMI using height and weight." }
+    ];
+
+    const grid = document.getElementById("tools");
+    const workspace = document.getElementById("workspace");
+    const searchInput = document.getElementById("search");
+
+    function renderTools(filterCat = "All", query = "") {
+      grid.innerHTML = "";
+      const filtered = tools.filter(t => {
+        const matchesCat = filterCat === "All" || t.cat === filterCat;
+        const matchesQuery = t.name.toLowerCase().includes(query.toLowerCase()) || t.desc.toLowerCase().includes(query.toLowerCase());
+        return matchesCat && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #6b7280;">No tools found.</p>';
+        return;
+      }
+
+      filtered.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "panel";
+        card.style.margin = "0";
+        card.style.cursor = "pointer";
+        card.innerHTML = `
+          <div style="font-size: 28px; margin-bottom: 10px;">${t.icon}</div>
+          <h3 style="margin: 0 0 8px 0; font-size: 18px;">${t.name}</h3>
+          <p style="margin: 0 0 14px 0; color: #4b5563; font-size: 14px;">${t.desc}</p>
+          <span style="color: #10B981; font-weight: bold; font-size: 14px;">Open tool →</span>
+        `;
+        card.onclick = () => openTool(t.id);
+        grid.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll("#filters button").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelector("#filters button.active").classList.remove("active");
+        btn.classList.add("active");
+        renderTools(btn.getAttribute("data-cat"), searchInput.value);
+      };
+    });
+
+    searchInput.oninput = (e) => {
+      const activeCat = document.querySelector("#filters button.active").getAttribute("data-cat");
+      renderTools(activeCat, e.target.value);
+    };
+
+    document.getElementById("back").onclick = () => {
+      workspace.hidden = true;
+      document.querySelector(".hero").style.display = "block";
+      document.getElementById("filters").style.display = "flex";
+      grid.hidden = false;
+    };
+
+    function openTool(id) {
+      document.querySelector(".hero").style.display = "none";
+      document.getElementById("filters").style.display = "none";
+      grid.hidden = true;
+      workspace.hidden = false;
+      const out = document.getElementById("output");
+      out.hidden = true;
+
+      if (id === "percentage") {
+        document.getElementById("toolTitle").innerText = "Percentage Calculator";
+        document.getElementById("toolDescription").innerText = "Calculate a percentage of a number.";
+        document.getElementById("toolForm").innerHTML = `
+          <label>What is</label>
+          <input type="number" id="p1" placeholder="e.g. 20">
+          <label>% of</label>
+          <input type="number" id="p2" placeholder="e.g. 150">
+          <button class="action" id="run">Calculate</button>
+        `;
+        document.getElementById("run").onclick = () => {
+          const a = parseFloat(document.getElementById("p1").value) || 0;
+          const b = parseFloat(document.getElementById("p2").value) || 0;
+          const res = (a * b) / 100;
+          out.hidden = false;
+          out.innerHTML = `<b>Result:</b> ${res}`;
+        };
+      } 
+      else if (id === "percentage-change") {
+        document.getElementById("toolTitle").innerText = "Percentage Change";
+        document.getElementById("toolDescription").innerText = "Calculate percentage increase or decrease.";
+        document.getElementById("toolForm").innerHTML = `
+          <label>Initial Value</label>
+          <input type="number" id="pc1" placeholder="e.g. 100">
+          <label>Final Value</label>
+          <input type="number" id="pc2" placeholder="e.g. 125">
+          <button class="action" id="run">Calculate Change</button>
+        `;
+        document.getElementById("run").onclick = () => {
+          const init = parseFloat(document.getElementById("pc1").value) || 0;
+          const final = parseFloat(document.getElementById("pc2").value) || 0;
+          if (init === 0) return;
+          const diff = final - init;
+          const pct = (diff / init) * 100;
+          out.hidden = false;
+          out.innerHTML = `<b>Percentage Change:</b> ${pct.toFixed(2)}% (${diff >= 0 ? 'Increase' : 'Decrease'})`;
+        };
+      }
+      else if (id === "discount") {
+        document.getElementById("toolTitle").innerText = "Discount Calculator";
+        document.getElementById("toolDescription").innerText = "Find the sale price and savings.";
+        document.getElementById("toolForm").innerHTML = `
+          <label>Original Price</label>
+          <input type="number" id="d-price" placeholder="e.g. 1000">
+          <label>Discount Percentage (%)</label>
+          <input type="number" id="d-pct" placeholder="e.g. 15">
+          <button class="action" id="run">Calculate Discount</button>
+        `;
+        document.getElementById("run").onclick = () => {
+          const price = parseFloat(document.getElementById("d-price").value) || 0;
+          const pct = parseFloat(document.getElementById("d-pct").value) || 0;
+          const saving = (price * pct) / 100;
+          const finalPrice = price - saving;
+          out.hidden = false;
+          out.innerHTML = `<b>Savings:</b> Rs. ${saving.toFixed(2)}<br><b>Final Sale Price:</b> Rs. ${finalPrice.toFixed(2)}`;
+        };
+      }
+      else if (id === "age") {
+        document.getElementById("toolTitle").innerText = "Age Calculator";
+        document.getElementById("toolDescription").innerText = "Calculate exact age from your birth date.";
+        document.getElementById("toolForm").innerHTML = `
+          <label>Birth Date</label>
+          <input type="date" id="birth-date">
+          <button class="action" id="run">Calculate Age</button>
+        `;
+        document.getElementById("run").onclick = () => {
+          const bDate = new Date(document.getElementById("birth-date").value);
+          const today = new Date();
+          if (isNaN(bDate)) return;
+          let years = today.getFullYear() - bDate.getFullYear();
+          let months = today.getMonth() - bDate.getMonth();
+          if (months < 0 || (months === 0 && today.getDate() < bDate.getDate())) {
+            years--;
+            months += 12;
+          }
+          out.hidden = false;
+          out.innerHTML = `<b>Your Age:</b> ${years} years and ${months} months old.`;
+        };
+      }
+      else if (id === "bmi") {
+        document.getElementById("toolTitle").innerText = "BMI Calculator";
+        document.getElementById("toolDescription").innerText = "Estimate BMI using height and weight.";
+        document.getElementById("toolForm").innerHTML = `
+          <label>Height (Inches)</label>
+          <input type="number" id="bmi-in" placeholder="e.g. 70">
+          <label>Weight (Pounds)</label>
+          <input type="number" id="bmi-lb" placeholder="e.g. 160">
+          <button class="action" id="run">Calculate BMI</button>
+        `;
+        document.getElementById("run").onclick = () => {
+          const inches = parseFloat(document.getElementById("bmi-in").value) || 0;
+          const lbs = parseFloat(document.getElementById("bmi-lb").value) || 0;
+          if (inches <= 0 || lbs <= 0) return;
+          const bmi = (703 * lbs) / (inches * inches);
+          let status = "Normal";
+          if (bmi < 18.5) status = "Underweight";
+          else if (bmi >= 25 && bmi < 30) status = "Overweight";
+          else if (bmi >= 30) status = "Obesity";
+          
+          out.hidden = false;
+          out.innerHTML = `<b>BMI:</b> ${bmi.toFixed(1)} kg/m² (${status})`;
+        };
+      }
+    }
+
+    renderTools(); 
   </script>
 </body>
 </html>
