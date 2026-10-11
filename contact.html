@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Contact GTooli to report a problem, suggest a tool, or share feedback about our free online tools.">
+  <title>Contact GTooli — Feedback and Support</title>
+  <style>
+    :root{--green:#159447;--dark:#087337;--ink:#172337;--muted:#65738a;--line:#dfe8e2;--bg:#f5faf6;--card:#fff}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    header,footer{background:#fff;border-bottom:1px solid var(--line);padding:18px 20px}header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+    .logo{font-size:24px;font-weight:850;color:var(--green);text-decoration:none}nav a,footer a{color:var(--dark);text-decoration:none;margin-right:14px;font-weight:650}
+    main{max-width:850px;margin:38px auto;padding:0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(22px,5vw,42px);box-shadow:0 10px 30px #1a412b0a}
+    h1{line-height:1.2;font-size:clamp(30px,5vw,42px);margin-top:0}h2{margin-top:28px;color:var(--dark)}.muted{color:var(--muted)}
+    .button{display:inline-block;background:var(--green);color:white;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:750}
+    .note{background:#f0faf3;border:1px solid #cfe9d6;padding:15px;border-radius:12px}
+    footer{text-align:center;border-top:1px solid var(--line);border-bottom:0;color:var(--muted);padding:24px 12px}
+  </style>
+</head>
+<body>
+<header><a class="logo" href="./index.html">GTooli</a><nav><a href="./index.html">Home / Tools</a><a href="./about.html">About</a><a href="./privacy.html">Privacy</a></nav></header>
+<main><article class="card">
+  <p class="muted">WE'D LIKE TO HEAR FROM YOU</p>
+  <h1>Contact GTooli</h1>
+  <p>Found a problem, have a suggestion, or want to recommend a tool? You can contact the GTooli project through its GitHub repository.</p>
+  <div class="note"><strong>For now, use GitHub to send feedback.</strong><br>GitHub may ask you to sign in to post a message. Please do not include passwords, private documents, or other sensitive information in a public issue.</div>
+  <p><a class="button" href="https://github.com/mc170201270-rgb/gtooli/issues" target="_blank" rel="noopener noreferrer">Open GTooli Feedback Page ↗</a></p>
+  <h2>What should I include?</h2>
+  <ul>
+    <li>The name of the tool you were using.</li>
+    <li>What you expected to happen.</li>
+    <li>What actually happened.</li>
+    <li>Your device and browser, if relevant.</li>
+  </ul>
+  <p>Thank you for helping make GTooli better.</p>
+</article></main>
+<footer>© <span id="year"></span> GTooli · <a href="./about.html">About</a><a href="./privacy.html">Privacy Policy</a><a href="./contact.html">Contact</a></footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+</body></html>
