@@ -1,838 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GTooli — Free Online Tools</title>
-  <style>
-    :root {
-      --blue: #10B981; 
-      --ink: #111827; 
-      --muted: #4B5563; 
-      --line: #E5E7EB; 
-      --bg: #F9FAFB;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: sans-serif; color: var(--ink); background: var(--bg); }
-    header { background: white; border-bottom: 1px solid var(--line); padding: 18px 6%; }
-    nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .logo { font-size: 23px; font-weight: 800; color: var(--blue); text-decoration: none; }
-    main { max-width: 1100px; margin: auto; padding: 40px 20px; }
-    .hero { text-align: center; padding: 35px 0; }
-    .hero h1 { font-size: clamp(32px, 5vw, 48px); margin: 0 0 14px; }
-    .hero p { color: var(--muted); line-height: 1.7; }
-    .search { width: min(600px, 100%); padding: 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 16px; margin: 18px 0; }
-    .filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 10px 0 30px; }
-    .filters button, .action { border: 0; border-radius: 9px; padding: 11px 15px; background: white; color: var(--ink); font-size: 14px; cursor: pointer; border: 1px solid var(--line); }
-    .filters button.active, .action { background: var(--blue); color: white; border-color: var(--blue); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .panel { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin: 28px 0; }
-    .panel [hidden] { display: none; }
-    input { width: 100%; padding: 12px; border: 1px solid #ccd3e0; border-radius: 8px; font: inherit; margin: 8px 0 14px; }
-    label { font-weight: 600; font-size: 14px; }
-    .result { background: #f0f3ff; border-radius: 8px; padding: 14px; line-height: 1.7; overflow-wrap: anywhere; }
-    footer { text-align: center; padding: 30px 16px; color: var(--muted); line-height: 2; }
-    footer a { margin: 0 8px; color: var(--blue); text-decoration: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="GTooli offers free online tools including health calculators, date difference, text utilities, converters and more.">
+<title>GTooli — Free Online Tools</title>
+<style>
+:root{--green:#159447;--green-dark:#087337;--ink:#172337;--muted:#65738a;--line:#dfe8e2;--bg:#f5faf6;--card:#fff;--accent:#159447;--accent-soft:#e8f7ed;--shadow:0 14px 38px rgba(26,65,43,.08)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#f7fcf8 0%,#f4f8fb 52%,#f7faf7 100%)}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:15px clamp(16px,5vw,72px)}
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;max-width:1240px;margin:auto}
+.logo{font-size:27px;font-weight:900;letter-spacing:-1px;color:var(--green);text-decoration:none}
+nav>a:not(.logo){font-weight:700;color:var(--ink);text-decoration:none;padding:9px 14px;border-radius:10px}
+nav>a:not(.logo):hover{background:var(--accent-soft);color:var(--green-dark)}
+a{color:var(--green-dark);text-decoration:none}
+main{max-width:1240px;margin:auto;padding:28px 20px 52px}
+.hero{text-align:center;padding:44px 0 26px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #ccebd5;border-radius:999px;background:#fff;color:var(--green-dark);font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.08;letter-spacing:-1.8px;margin:18px auto 14px;max-width:850px}
+.hero h1 span{color:var(--green)}
+.hero p{max-width:650px;margin:0 auto;color:var(--muted);line-height:1.8}
+.search{display:block;width:min(660px,100%);padding:17px 20px;border:1px solid #d9e5dc;border-radius:16px;font-size:16px;margin:24px auto 12px;background:white;box-shadow:0 8px 25px rgba(26,65,43,.05);outline:none}
+.search:focus,input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(21,148,71,.12);outline:none}
+.ad-slot{display:flex;align-items:center;justify-content:center;text-align:center;min-height:94px;margin:18px 0 30px;padding:16px;border:1px dashed #cbd7ce;border-radius:16px;background:rgba(255,255,255,.62);color:#8a968d;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.filters{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin:12px 0 25px}
+button,.tool-card{cursor:pointer}
+button{font:inherit}
+.filters button,.action{border:1px solid var(--line);border-radius:11px;padding:11px 15px;background:white;color:var(--ink);font-size:14px;font-weight:750;transition:.18s}
+.filters button:hover{border-color:#9fd6ad}
+.filters button.active,.action{background:var(--green);border-color:var(--green);color:white}
+.action:hover{background:var(--green-dark);border-color:var(--green-dark);transform:translateY(-1px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}
+.tool-card{width:100%;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:left;transition:transform .18s,border-color .18s,box-shadow .18s;color:var(--ink);box-shadow:0 4px 14px rgba(26,65,43,.025)}
+.tool-card:hover,.tool-card:focus-visible{transform:translateY(-4px);border-color:#8fd0a0;box-shadow:var(--shadow);outline:none}
+.tool-card .emoji{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--accent-soft);font-size:25px}
+.tool-card h3{margin:15px 0 7px;font-size:18px;letter-spacing:-.3px}
+.tool-card p{color:var(--muted);line-height:1.6;font-size:14px;min-height:44px}
+.tool-card span:last-child{font-size:13px;font-weight:800;color:var(--green-dark)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,3vw,30px);margin:28px 0;box-shadow:0 8px 28px rgba(26,65,43,.035)}
+.panel[hidden]{display:none}
+.panel h2{margin-top:0;letter-spacing:-.5px}
+input,textarea,select{width:100%;padding:13px 14px;border:1px solid #d7e2d9;border-radius:11px;font:inherit;margin:8px 0 16px;background:#fbfdfb;color:var(--ink);transition:.18s}
+textarea{min-height:130px;resize:vertical}
+label{display:block;font-weight:750;font-size:13px;color:#344459}
+.action{margin:4px 6px 4px 0}
+.result{background:#effaf2;border:1px solid #d5efdc;border-radius:12px;padding:16px;line-height:1.8;overflow-wrap:anywhere;margin-top:14px}
+.result textarea{background:white}
+footer{text-align:center;padding:30px 16px;color:var(--muted);line-height:2;border-top:1px solid var(--line);background:white}
+footer a{margin:0 8px}
+.reference-box{margin-top:14px;padding:12px 14px;border:1px solid var(--border,#dbe5df);border-radius:12px;background:rgba(22,163,74,.045)}.reference-box summary{cursor:pointer;color:var(--green,#15803d)}.reference-box a{color:var(--green,#15803d);text-decoration:underline}.reference-box li{margin:6px 0}
+.small{font-size:13px;color:var(--muted)}
+.section-heading{text-align:center;margin:38px 0 20px}
+.section-heading h2{margin:0 0 6px;font-size:clamp(25px,3vw,34px);letter-spacing:-.8px}
+.section-heading p{margin:0;color:var(--muted)}
+/* Classic calculator */
+.calculator-panel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:26px;align-items:center}
+.calc-shell{max-width:410px;width:100%;margin:auto;padding:18px;border:1px solid #dce7df;border-radius:25px;background:linear-gradient(145deg,#ffffff,#f1f8f3);box-shadow:0 18px 45px rgba(22,91,47,.12)}
+.calc-shell{--calc-accent:#159447;--calc-accent-dark:#087337}.calc-top{display:flex;justify-content:space-between;align-items:center;margin:0 2px 12px;font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--calc-accent-dark)}
+.calc-screen{min-height:104px;padding:16px 14px;margin-bottom:13px;border-radius:15px;background:color-mix(in srgb,var(--calc-accent) 8%,white);border:1px solid color-mix(in srgb,var(--calc-accent) 20%,white);text-align:right;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+#calcExpression{min-height:23px;color:var(--calc-accent-dark);font-size:14px;overflow-wrap:anywhere}
+#calcDisplay{font-size:clamp(30px,5vw,40px);font-weight:800;letter-spacing:-1px;overflow-wrap:anywhere}
+.calc-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.calc-key{min-height:53px;border:1px solid #e0e8e2;border-radius:13px;background:white;color:var(--ink);font-size:19px;font-weight:750;box-shadow:0 2px 0 #e7eee8;transition:.12s}
+.calc-key:hover{background:color-mix(in srgb,var(--calc-accent) 8%,white);border-color:color-mix(in srgb,var(--calc-accent) 35%,white)}
+.calc-key:active{transform:translateY(2px);box-shadow:none}
+.calc-key.utility{background:color-mix(in srgb,var(--calc-accent) 8%,white);color:var(--calc-accent-dark)}
+.calc-key.operator{background:color-mix(in srgb,var(--calc-accent) 13%,white);color:var(--calc-accent-dark)}
+.calc-key.equals{background:var(--calc-accent);border-color:var(--calc-accent);color:#fff}
+.calc-key.zero{grid-column:span 2}
+.calc-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
+.calc-controls label{display:flex;align-items:center;gap:8px}
+.calc-controls input[type=color]{width:38px;height:34px;padding:2px;margin:0;border-radius:8px;cursor:pointer}
+.calc-controls input[type=checkbox]{width:auto;margin:0}
+.calc-copy h3{font-size:23px;margin:0 0 8px}
+.calc-copy p{color:var(--muted)}
+.calc-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.calc-pills span{background:#f0f8f2;color:var(--green-dark);border:1px solid #d9eddf;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:750}
+
+
+/* Health calculator visuals */
+.health-result{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.metric-hero{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.metric-value{font-size:clamp(28px,5vw,42px);font-weight:900;letter-spacing:-1px;color:var(--green-dark)}
+.metric-unit{font-weight:750;color:var(--muted)}
+.meter-wrap{margin:10px 0 6px}
+.meter-track{height:18px;border-radius:999px;position:relative;overflow:visible;display:flex;background:#e5e7eb;border:1px solid rgba(0,0,0,.06);margin:26px 8px 12px}
+.meter-seg{height:100%;display:block}
+.meter-seg:first-child{border-radius:999px 0 0 999px}
+.meter-seg:last-of-type{border-radius:0 999px 999px 0}
+.meter-needle{position:absolute;top:-13px;width:4px;height:44px;background:#172337;border:1px solid white;border-radius:4px;box-shadow:0 1px 5px #0003;transform:translateX(-50%);transition:left .65s cubic-bezier(.2,.8,.2,1);z-index:2}
+.meter-needle:before{content:"";position:absolute;top:-5px;left:-5px;width:12px;height:12px;border-radius:50%;background:#172337;border:2px solid white}
+.meter-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.meter-legend span{font-size:12px;font-weight:750;padding:5px 8px;border-radius:8px;background:#f5f7f6;border:1px solid #e2e8e3}
+.meter-axis{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}
+.health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:12px}
+.health-stat{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fbfefb}
+.health-stat strong{display:block;font-size:19px;color:var(--green-dark)}
+.health-stat span{font-size:12px;color:var(--muted)}
+.medical-note{font-size:13px;color:var(--muted);line-height:1.7}
+@media(max-width:600px){.health-grid{grid-template-columns:1fr 1fr}.metric-value{font-size:30px}}
+\n/* Support */
+.support-panel{background:linear-gradient(135deg,#f0fbf3,#ffffff 62%,#f4fbff);border-color:#cfe8d5}
+.support-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:24px;align-items:center}
+.support-panel .heart{font-size:35px}
+.amounts{display:flex;gap:9px;flex-wrap:wrap;margin:8px 0 14px}
+.amount-btn{border:1px solid #cfe4d4;border-radius:12px;padding:11px 15px;background:white;color:var(--green-dark);font-weight:800}
+.amount-btn.selected,.amount-btn:hover{background:var(--green);color:white;border-color:var(--green)}
+.custom-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,.7fr);gap:10px}
+.custom-row input,.custom-row select{margin:5px 0 12px}
+.qr-box{border:1px dashed #a9cfb2;background:#fff;border-radius:18px;padding:18px;text-align:center}
+.qr-box img{display:block;width:min(220px,100%);aspect-ratio:1;object-fit:contain;margin:0 auto 10px}
+.qr-placeholder{width:min(220px,100%);aspect-ratio:1;margin:0 auto 10px;display:grid;place-items:center;border-radius:12px;background:repeating-linear-gradient(45deg,#f1f8f2,#f1f8f2 10px,#e6f2e8 10px,#e6f2e8 20px);color:#56745e;padding:15px;font-size:13px}
+@media(max-width:760px){main{padding:18px 14px 36px}.hero{padding:30px 0 20px}.calculator-panel,.support-layout{grid-template-columns:1fr}.calc-copy{order:-1}.calc-shell{max-width:440px}.ad-slot{min-height:76px}.panel{margin:20px 0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Header controls, site-wide themes, and responsive advertising rails */
+nav{max-width:1440px}
+.nav-tools{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.nav-tools .nav-label{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
+.nav-tools select{width:auto;min-width:96px;padding:8px 10px;margin:0;border-radius:10px;font-size:13px;background:var(--card);color:var(--ink)}
+.nav-tools input[type=color]{width:36px;height:36px;padding:2px;margin:0;border:1px solid var(--line);border-radius:9px;cursor:pointer;background:var(--card)}
+.visitor-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:12px;font-weight:800;white-space:nowrap}
+.page-layout{display:grid;grid-template-columns:160px minmax(0,1240px) 160px;gap:16px;justify-content:center;align-items:stretch}
+.page-layout main{width:100%;max-width:none;min-width:0}
+.ad-rail{display:flex;align-items:flex-start;justify-content:center;padding-top:210px;min-width:0}
+.ad-rail-inner{width:100%;min-height:600px;position:sticky;top:120px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;border:1px dashed #cbd7ce;border-radius:14px;background:rgba(255,255,255,.48);color:#8a968d;font-size:11px;line-height:1.6;letter-spacing:.08em;overflow-wrap:anywhere}
+body[data-theme="dark"]{--ink:#e8eef6;--muted:#a8b5c7;--line:#344254;--bg:#111827;--card:#1d2938;--accent-soft:#243b32;--shadow:0 14px 38px rgba(0,0,0,.28);background:#111827;color:var(--ink)}
+body[data-theme="dark"] header,body[data-theme="dark"] footer{background:#172231;border-color:#344254}
+body[data-theme="dark"] .panel,body[data-theme="dark"] .tool-card,body[data-theme="dark"] .search,body[data-theme="dark"] .filters button,body[data-theme="dark"] input,body[data-theme="dark"] textarea,body[data-theme="dark"] select,body[data-theme="dark"] .nav-tools select,body[data-theme="dark"] .visitor-pill{background:#1d2938;color:var(--ink);border-color:#344254}
+body[data-theme="dark"] .ad-slot,body[data-theme="dark"] .ad-rail-inner{background:#182333;border-color:#3a4b5e;color:#9eacbd}
+body[data-theme="dark"] .result,body[data-theme="dark"] .health-stat,body[data-theme="dark"] .meter-legend span{background:#223329;border-color:#365544;color:var(--ink)}
+body[data-theme="dark"] .calc-shell{background:linear-gradient(145deg,#202d3d,#172333);border-color:#3a4b5e}
+body[data-theme="dark"] .calc-key{background:#263548;color:#e8eef6;border-color:#3a4b5e;box-shadow:0 2px 0 #172231}
+body[data-theme="dark"] .calc-screen{background:#172b24;border-color:#365544}
+body[data-theme="dark"] .support-panel{background:linear-gradient(135deg,#1c3026,#1d2938 62%,#1b2c3c)}
+body[data-theme="dark"] .calc-key.equals{background:var(--calc-accent);color:white}
+body[data-theme="dark"] .amount-btn{background:#1d2938;color:var(--ink);border-color:#344254}
+body[data-theme="dark"] .amount-btn.selected{background:var(--accent-soft)}
+body[data-theme="dark"] .qr-placeholder{background:#1d2938;color:var(--muted)}
+body[data-theme="green"]{--bg:#eefaf0;--card:#fbfffc;background:linear-gradient(180deg,#e8f8ec 0%,#f2faf4 60%,#eaf7ee 100%)}
+body[data-theme="green"] header,body[data-theme="green"] footer{background:#f6fff8}
+body[data-theme="light"]{color-scheme:light}
+body[data-theme="dark"]{color-scheme:dark}
+@media(max-width:1500px){.page-layout{grid-template-columns:minmax(0,1240px);}.ad-rail{display:none}}
+
+@media(max-width:760px){nav{align-items:flex-start}.nav-tools{width:100%;justify-content:flex-start}.nav-tools .nav-label{display:none}.nav-tools select{min-width:90px}.page-layout{display:block}}
+
+</style>
 </head>
 <body>
-  <header>
-    <nav>
-      <a class="logo" href="./">GTooli</a>
-    </nav>
-  </header>
-
+<header><nav>
+  <a class="logo" href="./" aria-label="GTooli home">GTooli</a>
+  <div class="nav-tools" aria-label="Website settings">
+    <label class="nav-label" for="languageSelect">Language</label>
+    <select id="languageSelect" aria-label="Interface language"><option value="en">English</option><option value="ur">اردو</option></select>
+    <label class="nav-label" for="themeSelect">Theme</label>
+    <select id="themeSelect" aria-label="Website theme"><option value="light">Light</option><option value="dark">Dark</option><option value="green">Green</option></select>
+    <label class="nav-label" for="siteColor">Site color</label>
+    <input type="color" id="siteColor" value="#159447" aria-label="Change whole website accent color" title="Change whole website accent color">
+  </div>
+</nav></header>
+<div class="page-layout">
+  <aside class="ad-rail" aria-label="Left advertising space"><div class="ad-rail-inner">Advertisement space<br>160 × 600</div></aside>
   <main>
-    <section class="hero">
-      <h1>Everyday tools. Absolutely simple.</h1>
-      <p>Clean, fast web utilities built for your daily workflow.</p>
-      <input id="search" class="search" type="search" placeholder="Search tools..." aria-label="Search tools">
-    </section>
-
-    <!-- Categories Filters -->
-    <div class="filters" id="filters">
-      <button class="active" data-cat="All">All tools</button>
-      <button data-cat="Calculators">Calculators</button>
-    </div>
-
-    <!-- Tools Grid Area (Empty and ready for your new tools) -->
-    <section id="tools" class="grid" aria-label="Available tools"></section>
-
-    <!-- Workspace Panel for Active Tool -->
-    <section class="panel" id="workspace" hidden>
-      <button class="action" id="back">← All tools</button>
-      <h2 id="toolTitle">Tool</h2>
-      <p id="toolDescription"></p>
-      <div id="toolForm"></div>
-      <div id="output" class="result" hidden aria-live="polite"></div>
-    </section>
-
-    <!-- Why use GTooli Section -->
-    <section class="panel">
-      <h2>Why use GTooli?</h2>
-      <p>Simple, accessible utilities for everyday tasks. Most tools run directly in your browser without tracking or uploading your data.</p>
-    </section>
-
-    <!-- Appreciate / Support Widget Container -->
-    <div style="max-width: 450px; margin: 40px auto; padding: 24px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-      <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #111827;">❤️ Appreciate GTooli?</h3>
-      <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563;">Support independent developer tools with a small tip.</p>
-
-      <!-- Currency Preset Buttons -->
-      <div id="preset-buttons" style="display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;"></div>
-
-      <!-- Custom Amount Input -->
-      <div style="margin-bottom: 16px;">
-        <input type="number" id="custom-amount" placeholder="Or enter custom amount" style="width: 100%; max-width: 280px; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; text-align: center; box-sizing: border-box;" />
-      </div>
-
-      <!-- Proceed Button -->
-      <button onclick="revealQR()" style="background-color: #10b981; color: white; border: none; padding: 10px 24px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; max-width: 280px;">Proceed to Support</button>
-
-      <!-- Hidden QR Section -->
-      <div id="qr-section" style="display: none; margin-top: 20px; border-top: 1px dashed #e5e7eb; padding-top: 16px;">
-        <p id="selected-msg" style="font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 10px;"></p>
-        <img src="zindgi-qr.png" alt="Zindgi QR Code" style="width: 160px; height: 160px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 4px; background: #fff;" />
-        <p style="font-size: 12px; color: #6b7280; margin-top: 8px;">Scan using your Zindgi or local banking app to complete support.</p>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    <p>© 2026 GTooli</p>
-  </footer>
-
-  <!-- Appreciate Widget Script -->
-  <script>
-    const userLang = navigator.language || navigator.userLanguage || "";
-    const isPakistan = userLang.includes("PK") || userLang.includes("ur") || Intl.DateTimeFormat().resolvedOptions().timeZone.includes("Karachi");
-    const currencySymbol = isPakistan ? "Rs. " : "$";
-    const defaultPresets = isPakistan ? [100, 500, 1000] : [3, 5, 10];
-
-    const presetContainer = document.getElementById("preset-buttons");
-    defaultPresets.forEach(val => {
-      const btn = document.createElement("button");
-      btn.innerText = currencySymbol + val;
-      btn.style.cssText = "flex: 1; padding: 8px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;";
-      btn.onclick = () => { document.getElementById("custom-amount").value = val; };
-      presetContainer.appendChild(btn);
-    });
-
-    function revealQR() {
-      const amountInput = document.getElementById("custom-amount").value;
-      const finalAmount = amountInput ? amountInput : defaultPresets[1];
-      document.getElementById("selected-msg").innerText = `Scan to send ${currencySymbol}${finalAmount} via Zindgi:`;
-      document.getElementById("qr-section").style.display = "block";
-    }
-
-
-<!-- GTooli Calculator: Copy and paste this entire code into index.html -->
-
-<style>
-  #gtooli-calculator,
-  #gtooli-calculator * {
-    box-sizing: border-box;
-  }
-
-  #gtooli-calculator {
-    --calc-body: #5b5b60;
-    --calc-button: #f5f5f5;
-    --calc-button-text: #333333;
-    --calc-display: #cbd0dc;
-    --calc-accent: #f28c28;
-    --calc-text: #ffffff;
-
-    width: 100%;
-    max-width: 235px;
-    margin: 24px auto;
-    padding: 17px;
-    border-radius: 23px;
-    background: var(--calc-body);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 8px 0 rgba(0,0,0,0.18);
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--calc-text);
-    transition: background 0.25s ease;
-  }
-
-  #gtooli-calculator .calc-heading {
-    margin: 0 0 12px;
-    font-size: 16px;
-    text-align: center;
-    font-weight: 700;
-  }
-
-  #gtooli-calculator .calc-display {
-    width: 100%;
-    height: 47px;
-    margin-bottom: 19px;
-    padding: 5px 10px;
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: 7px;
-    background: var(--calc-display);
-    color: #222222;
-    text-align: right;
-    font-family: "Courier New", monospace;
-    font-size: 31px;
-    font-weight: 500;
-    line-height: 35px;
-    overflow: hidden;
-    white-space: nowrap;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
-  }
-
-  #gtooli-calculator .calc-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 7px;
-  }
-
-  #gtooli-calculator .calc-btn {
-    min-width: 0;
-    height: 41px;
-    padding: 0;
-    border: 0;
-    border-radius: 6px;
-    background: var(--calc-button);
-    color: var(--calc-button-text);
-    font-size: 27px;
-    line-height: 1;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.14);
-    transition: transform 0.08s, filter 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  #gtooli-calculator .calc-btn:hover {
-    filter: brightness(0.91);
-  }
-
-  #gtooli-calculator .calc-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.14);
-  }
-
-  #gtooli-calculator .calc-btn.operator {
-    background: #eeeeee;
-  }
-
-  #gtooli-calculator .calc-btn.equals {
-    background: var(--calc-accent);
-    color: #ffffff;
-  }
-
-  #gtooli-calculator .calc-btn.utility {
-    font-size: 19px;
-  }
-
-  #gtooli-calculator .calc-themes {
-    margin-top: 18px;
-  }
-
-  #gtooli-calculator .calc-theme-label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  #gtooli-calculator .calc-theme-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 7px;
-    background: rgba(255,255,255,0.12);
-    color: #ffffff;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  #gtooli-calculator .calc-theme-select option {
-    background: #ffffff;
-    color: #222222;
-  }
-
-  #gtooli-calculator .calc-hint {
-    margin: 10px 0 0;
-    color: rgba(255,255,255,0.8);
-    text-align: center;
-    font-size: 10px;
-  }
-
-  @media (max-width: 360px) {
-    #gtooli-calculator {
-      max-width: 225px;
-      padding: 14px;
-    }
-
-    #gtooli-calculator .calc-btn {
-      height: 39px;
-      font-size: 25px;
-    }
-  }
-</style>
-
-<div id="gtooli-calculator" role="group" aria-label="GTooli calculator">
-  <h3 class="calc-heading">Calculator</h3>
-
-  <div
-    id="gtooli-display"
-    class="calc-display"
-    role="status"
-    aria-live="polite"
-    aria-label="Calculator display"
-  >0</div>
-
-  <div class="calc-grid">
-    <button type="button" class="calc-btn" data-action="digit" data-value="7">7</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="8">8</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="9">9</button>
-    <button type="button" class="calc-btn operator" data-action="operator" data-value="÷" aria-label="Divide">÷</button>
-
-    <button type="button" class="calc-btn" data-action="digit" data-value="4">4</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="5">5</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="6">6</button>
-    <button type="button" class="calc-btn operator" data-action="operator" data-value="×" aria-label="Multiply">×</button>
-
-    <button type="button" class="calc-btn" data-action="digit" data-value="1">1</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="2">2</button>
-    <button type="button" class="calc-btn" data-action="digit" data-value="3">3</button>
-    <button type="button" class="calc-btn operator" data-action="operator" data-value="−" aria-label="Subtract">−</button>
-
-    <button type="button" class="calc-btn" data-action="digit" data-value="0">0</button>
-    <button type="button" class="calc-btn" data-action="decimal" aria-label="Decimal point">.</button>
-    <button type="button" class="calc-btn operator" data-action="operator" data-value="+" aria-label="Add">+</button>
-    <button type="button" class="calc-btn equals" data-action="equals" aria-label="Calculate result">=</button>
-
-    <button type="button" class="calc-btn utility" data-action="clear">C</button>
-    <button type="button" class="calc-btn utility" data-action="backspace" aria-label="Backspace">⌫</button>
-    <button type="button" class="calc-btn utility" data-action="sign" aria-label="Change sign">±</button>
-    <button type="button" class="calc-btn utility" data-action="percent">%</button>
-  </div>
-
-  <div class="calc-themes">
-    <label class="calc-theme-label" for="gtooli-theme">Calculator color</label>
-    <select id="gtooli-theme" class="calc-theme-select">
-      <option value="default">Classic Gray</option>
-      <option value="blue">Ocean Blue</option>
-      <option value="green">Forest Green</option>
-      <option value="purple">Royal Purple</option>
-      <option value="red">Ruby Red</option>
-      <option value="black">Midnight Black</option>
-      <option value="light">Light Silver</option>
-    </select>
-  </div>
-
-  <p class="calc-hint">Use your keyboard or click the buttons</p>
+<section class="hero">
+  <h1>Everyday tools.<br><span>Absolutely simple.</span></h1>
+  <p>Free online tools to write, calculate, clean text and get things done — all in one simple place.</p>
+  <input id="search" class="search" type="search" placeholder="Search tools..." aria-label="Search tools">
+</section>
+<div class="filters" id="filters">
+  <button class="active" data-cat="All">All tools</button>
+  <button data-cat="Text">Text tools</button>
+  <button data-cat="Calculators">Calculators</button>
+  <button data-cat="Utilities">Utilities</button>
+  <button data-cat="Images">Image tools</button>
+  <button data-cat="Creator">Creator tools</button>
 </div>
+<div class="ad-slot" aria-label="Advertisement space">Advertisement space · 728 × 90 / responsive ad</div>
+<section id="tools" class="grid" aria-label="Available tools"></section>
+<div class="ad-slot" aria-label="Advertisement space">Advertisement space · in-content ad placement</div>
+<section class="panel" id="workspace" hidden>
+  <button class="action" id="back">← All tools</button>
+  <h2 id="toolTitle">Tool</h2><p id="toolDescription"></p><div id="toolForm"></div>
+  <div id="output" class="result" hidden aria-live="polite"></div>
+</section>
+
+<section class="panel" id="classic-calculator" hidden>
+  <button class="action" id="classicBack" type="button">← All tools</button>
+  <div class="calculator-panel">
+    <div class="calc-shell" id="calcShell">
+      <div class="calc-top"><span>Classic calculator</span><span>● Ready</span></div>
+      <div class="calc-screen" aria-live="polite">
+        <div id="calcExpression">Ready for your calculation</div>
+        <div id="calcDisplay">0</div>
+      </div>
+      <div class="calc-keys" id="calcKeys">
+        <button class="calc-key utility" data-calc="clear" aria-label="Clear all">AC</button>
+        <button class="calc-key utility" data-calc="delete" aria-label="Delete last digit">DEL</button>
+        <button class="calc-key utility" data-calc="percent">%</button>
+        <button class="calc-key operator" data-calc="op" data-value="÷">÷</button>
+        <button class="calc-key" data-calc="digit" data-value="7">7</button>
+        <button class="calc-key" data-calc="digit" data-value="8">8</button>
+        <button class="calc-key" data-calc="digit" data-value="9">9</button>
+        <button class="calc-key operator" data-calc="op" data-value="×">×</button>
+        <button class="calc-key" data-calc="digit" data-value="4">4</button>
+        <button class="calc-key" data-calc="digit" data-value="5">5</button>
+        <button class="calc-key" data-calc="digit" data-value="6">6</button>
+        <button class="calc-key operator" data-calc="op" data-value="−">−</button>
+        <button class="calc-key" data-calc="digit" data-value="1">1</button>
+        <button class="calc-key" data-calc="digit" data-value="2">2</button>
+        <button class="calc-key" data-calc="digit" data-value="3">3</button>
+        <button class="calc-key operator" data-calc="op" data-value="+">+</button>
+        <button class="calc-key zero" data-calc="digit" data-value="0">0</button>
+        <button class="calc-key" data-calc="decimal">.</button>
+        <button class="calc-key equals" data-calc="equals">=</button>
+      </div>
+      <div class="calc-controls">
+        <label for="calcColor">Calculator color <input type="color" id="calcColor" value="#159447" aria-label="Choose calculator accent color"></label>
+        <label><input type="checkbox" id="calcSound"> Key feedback</label>
+      </div>
+    </div>
+    <div class="calc-copy">
+      <div class="eyebrow">Quick calculations</div>
+      <h3>A simple, classic calculator</h3>
+      <p>Use the familiar keypad for everyday sums, percentages, division and more. Customize its accent color to suit your style.</p>
+      <div class="calc-pills"><span>✓ Keyboard support</span><span>✓ Responsive layout</span><span>✓ No sign-in</span></div>
+      <p class="small">Keyboard: numbers, + − * /, Enter, Backspace and Escape.</p>
+    </div>
+  </div>
+</section>
+
+<div class="ad-slot" aria-label="Advertisement space">Advertisement space · responsive banner</div>
+
+<section class="panel support-panel" id="support">
+  <div class="support-layout">
+    <div>
+      <div class="heart">💚</div>
+      <h2>Enjoying GTooli? Support it.</h2>
+      <p>If these free tools save you time, you can help support hosting and future improvements. Every contribution is optional and appreciated.</p>
+      <label>Choose an amount</label>
+      <div class="amounts" id="supportAmounts">
+        <button class="amount-btn selected" type="button" data-amount="100">100</button>
+        <button class="amount-btn" type="button" data-amount="250">250</button>
+        <button class="amount-btn" type="button" data-amount="500">500</button>
+        <button class="amount-btn" type="button" data-amount="1000">1,000</button>
+      </div>
+      <div class="custom-row">
+        <div><label for="supportCustom">Custom amount</label><input id="supportCustom" type="number" min="1" step="any" placeholder="Enter any amount"></div>
+        <div><label for="supportCurrency">Currency</label><select id="supportCurrency"><option value="PKR">PKR — Rs</option><option value="USD">USD — $</option><option value="GBP">GBP — £</option><option value="EUR">EUR — €</option><option value="INR">INR — ₹</option><option value="AED">AED</option><option value="SAR">SAR</option><option value="CAD">CAD</option><option value="AUD">AUD</option></select></div>
+      </div>
+      <button class="action" type="button" id="showSupportQR">💚 Support GTooli</button>
+      <p class="small">The preset currency is selected using your browser's regional settings where possible. Please verify the currency and amount before paying.</p>
+    </div>
+    <div class="qr-box" id="qrBox" aria-live="polite">
+      <div class="qr-placeholder" id="qrPlaceholder">Add your payment QR image here<br><strong>zindgi-qr.png</strong></div>
+      <img id="zindgiQR" src="zindgi-qr.png" alt="Zindgi QR payment code" hidden>
+      <strong id="qrTitle">Zindgi QR support</strong>
+      <p id="qrInstructions" class="small">Choose an amount, then select “Support GTooli” to display payment instructions.</p>
+      <p class="small">Payment QR label: <strong>zindgi-qr</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Why use GTooli?</h2>
+  <p>Simple, accessible utilities for everyday tasks. Most tools run directly in your browser, without uploading your text to a server.</p>
+  <p class="small">Always check your results before using them for important work.</p>
+</section>
+</main>
+  <aside class="ad-rail" aria-label="Right advertising space"><div class="ad-rail-inner">Advertisement space<br>160 × 600</div></aside>
+</div>
+<footer>
+  <div><a class="action" href="#support">💚 Appreciate / Support GTooli</a></div>
+  <div>© <span id="year"></span> <span style="color:var(--green);font-weight:800">GTooli</span></div>
+  <a href="about.html">About</a><a href="privacy.html">Privacy Policy</a><a href="contact.html">Contact</a>
+</footer>
 
 <script>
-(function () {
-  "use strict";
+const tools = [
+ {id:"words",name:"Word Counter",cat:"Text",icon:"📝",desc:"Count words, characters and sentences."},
+ {id:"case",name:"Case Converter",cat:"Text",icon:"🔠",desc:"Change capitalization in seconds."},
+ {id:"duplicates",name:"Remove Duplicate Lines",cat:"Text",icon:"🧹",desc:"Remove repeated lines from text."},
+ {id:"clean",name:"Text Cleaner",cat:"Text",icon:"✨",desc:"Remove extra spaces and tidy text."},
+ {id:"slug",name:"Slug Generator",cat:"Text",icon:"🔗",desc:"Turn a title into a URL-friendly slug."},
+ {id:"reverse",name:"Reverse Text",cat:"Text",icon:"↔️",desc:"Reverse the characters in your text."},
+ {id:"linecount",name:"Line Counter",cat:"Text",icon:"📃",desc:"Count lines in pasted text."},
+ {id:"classic-calculator",name:"Classic Calculator",cat:"Calculators",icon:"🧮",desc:"A familiar calculator for everyday arithmetic."},
+ {id:"percent",name:"Percentage Calculator",cat:"Calculators",icon:"％",desc:"Calculate a percentage of a number."},
+ {id:"change",name:"Percentage Change",cat:"Calculators",icon:"📈",desc:"Calculate percentage increase or decrease."},
+ {id:"discount",name:"Discount Calculator",cat:"Calculators",icon:"🏷️",desc:"Find the sale price and savings."},
+ {id:"age",name:"Age Calculator",cat:"Calculators",icon:"🎂",desc:"Calculate age from your birth date."},
+ {id:"bmi",name:"BMI Calculator",cat:"Calculators",icon:"⚖️",desc:"Estimate BMI using height and weight."},
+ {id:"bmr",name:"BMR & Daily Calories",cat:"Calculators",icon:"🔥",desc:"Estimate resting energy use and daily calorie needs."},
+ {id:"water",name:"Daily Water Estimate",cat:"Calculators",icon:"💧",desc:"Estimate a daily fluid target from body weight."},
+ {id:"idealweight",name:"Healthy Weight Range",cat:"Calculators",icon:"🎯",desc:"Estimate an adult weight range from height."},
+ {id:"wthr",name:"Waist-to-Height Ratio",cat:"Calculators",icon:"📏",desc:"Compare waist measurement with height."},
+ {id:"heartrate",name:"Target Heart Rate",cat:"Calculators",icon:"❤️",desc:"Estimate an age-based exercise heart-rate zone."},
+ {id:"pregnancy",name:"Pregnancy Due Date",cat:"Calculators",icon:"🗓️",desc:"Estimate a due date from the last menstrual period."},
+ {id:"macros",name:"Calories & Macro Split",cat:"Calculators",icon:"🥗",desc:"Split a calorie target into protein, carbs and fat."},
+ {id:"datediff",name:"Date & Time Difference",cat:"Calculators",icon:"⏱️",desc:"Calculate calendar age and total hours, minutes and seconds."},
+ {id:"length",name:"Length Converter",cat:"Calculators",icon:"📏",desc:"Convert meters, kilometers, feet and miles."},
+ {id:"password",name:"Password Generator",cat:"Utilities",icon:"🔐",desc:"Generate a random password locally."},
+ {id:"json",name:"JSON Formatter",cat:"Utilities",icon:"{ }",desc:"Format or validate JSON text."},
+ {id:"url",name:"URL Encoder / Decoder",cat:"Utilities",icon:"🌐",desc:"Encode or decode URL text."},
+ {id:"imgcompress",name:"Image Compressor",cat:"Images",icon:"🗜️",desc:"Compress an image in your browser."},
+ {id:"imgresize",name:"Image Resizer",cat:"Images",icon:"📐",desc:"Resize an image to new dimensions."},
+ {id:"imgconvert",name:"Image Format Converter",cat:"Images",icon:"🖼️",desc:"Convert images to PNG, JPEG or WebP."},
+ {id:"caption",name:"Instagram Caption Helper",cat:"Creator",icon:"📱",desc:"Create a caption draft from a topic and tone."},
+ {id:"hashtags",name:"Hashtag Helper",cat:"Creator",icon:"#️⃣",desc:"Suggest relevant hashtags from a topic."},
+ {id:"bio",name:"Social Bio Generator",cat:"Creator",icon:"✍️",desc:"Draft a short creator or business bio."},
+ {id:"ytitles",name:"YouTube Title Ideas",cat:"Creator",icon:"▶️",desc:"Generate title ideas from your video topic."},
+ {id:"postideas",name:"Social Post Ideas",cat:"Creator",icon:"💡",desc:"Brainstorm post ideas for a topic."}
+];
+let category="All", current=null, uiLanguage="en";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function renderCards(){
+ const q=$("search").value.toLowerCase();
+ $("tools").innerHTML=tools.filter(t=>(category==="All"||t.cat===category)&&(t.name+" "+t.desc+" "+t.cat).toLowerCase().includes(q)).map(t=>
+ `<button class="tool-card" data-id="${t.id}"><span class="emoji">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p><span>${uiLanguage==="ur"?"ٹول کھولیں ←":"Open tool →"}</span></button>`).join("");
+}
+$("search").addEventListener("input",renderCards);
+$("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-cat]");if(!b)return;category=b.dataset.cat;$("filters").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));renderCards();});
+$("tools").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b)openTool(b.dataset.id);});
+$("back").onclick=()=>{$("workspace").hidden=true;$("tools").scrollIntoView({behavior:"smooth"});};
+$("classicBack").onclick=()=>{$("classic-calculator").hidden=true;$("tools").scrollIntoView({behavior:"smooth"});};
+$("year").textContent=new Date().getFullYear();
+function field(label,id,type="text",placeholder="",extra=""){return `<label for="${id}">${label}</label><input id="${id}" type="${type}" placeholder="${placeholder}" ${extra}>`;}
+function area(label,id,placeholder="Paste your text here"){return `<label for="${id}">${label}</label><textarea id="${id}" placeholder="${placeholder}"></textarea>`;}
+function btn(text="Calculate"){return `<button class="action" id="run">${text}</button>`;}
+function openTool(id){
+ $("classic-calculator").hidden=true;
+ if(id==="classic-calculator"){
+   $("workspace").hidden=true;
+   $("classic-calculator").hidden=false;
+   $("classic-calculator").scrollIntoView({behavior:"smooth",block:"start"});
+   return;
+ }
+ current=tools.find(t=>t.id===id);$("toolTitle").textContent=current.name;$("toolDescription").textContent=current.desc;$("output").hidden=true;let f="";
+ switch(id){
+ case "words":f=area("Your text","a")+btn("Count text");break;
+ case "case":f=area("Your text","a")+`<label for="mode">Conversion</label><select id="mode"><option value="upper">UPPERCASE</option><option value="lower">lowercase</option><option value="title">Title Case</option><option value="sentence">Sentence case</option></select>`+btn("Convert text");break;
+ case "duplicates":f=area("One item per line","a")+btn("Remove duplicates");break;
+ case "clean":f=area("Your text","a")+btn("Clean text");break;
+ case "percent":f=field("Percentage (%)","a","number","e.g. 15")+field("Number","b","number","e.g. 200")+btn();break;
+ case "discount":f=field("Original price","a","number","e.g. 100")+field("Discount (%)","b","number","e.g. 20")+btn("Calculate sale price");break;
+ case "age":f=field("Date of birth","a","date","")+btn("Calculate age");break;
+ case "slug":f=area("Title or phrase","a")+btn("Generate slug");break;
+ case "reverse":f=area("Your text","a")+btn("Reverse text");break;
+ case "linecount":f=area("Your text","a")+btn("Count lines");break;
+ case "change":f=field("Original value","a","number","e.g. 80")+field("New value","b","number","e.g. 100")+btn("Calculate change");break;
+ case "bmi":f=field("Weight in kilograms","a","number","e.g. 70")+field("Height in centimeters","b","number","e.g. 175")+btn("Calculate BMI");break;
+ case "bmr":f=field("Age (years)","a","number","e.g. 30",'min="18" max="100"')+field("Weight (kg)","b","number","e.g. 70",'min="25" step="0.1"')+field("Height (cm)","c","number","e.g. 170",'min="100" step="0.1"')+`<label for="sex">Equation setting</label><select id="sex"><option value="female">Female constant (−161)</option><option value="male">Male constant (+5)</option></select><label for="activity">Typical activity level</label><select id="activity"><option value="1.2">Sedentary — little exercise</option><option value="1.375">Light — 1–3 days/week</option><option value="1.55">Moderate — 3–5 days/week</option><option value="1.725">Very active — 6–7 days/week</option><option value="1.9">Extra active — very hard training/physical work</option></select>`+btn("Estimate daily calories");break;
+ case "water":f=field("Body weight (kg)","a","number","e.g. 70",'min="1" step="0.1"')+`<label for="waterFactor">Estimate per kilogram</label><select id="waterFactor"><option value="30">30 ml/kg — lower estimate</option><option value="35">35 ml/kg — higher estimate</option></select>`+btn("Estimate water needs");break;
+ case "idealweight":f=field("Height (cm)","a","number","e.g. 170",'min="100" max="250" step="0.1"')+btn("Estimate adult weight range");break;
+ case "wthr":f=field("Waist circumference (cm)","a","number","e.g. 82",'min="1" step="0.1"')+field("Height (cm)","b","number","e.g. 170",'min="1" step="0.1"')+btn("Calculate ratio");break;
+ case "heartrate":f=field("Age (years)","a","number","e.g. 35",'min="18" max="100"')+btn("Estimate target zone");break;
+ case "pregnancy":f=field("First day of last menstrual period","a","date","") + field("Typical cycle length (days)","b","number","28",'min="20" max="45" value="28"')+btn("Estimate due date");break;
+ case "macros":f=field("Daily calorie target (kcal)","a","number","e.g. 2000",'min="1"')+`<label for="proteinPct">Protein (%)</label><input id="proteinPct" type="number" min="0" max="100" value="25"><label for="carbPct">Carbohydrates (%)</label><input id="carbPct" type="number" min="0" max="100" value="45"><label for="fatPct">Fat (%)</label><input id="fatPct" type="number" min="0" max="100" value="30">`+btn("Calculate macros");break;
+ case "datediff":f=field("Start date and time","a","datetime-local","") + field("End date and time","b","datetime-local","") + `<p class="small">For date-only comparisons, set both times to the same time (for example, midnight).</p>`+btn("Calculate difference");break;
+ case "length":f=field("Value","a","number","e.g. 5")+`<label for="fromUnit">From</label><select id="fromUnit"><option value="m">Meters</option><option value="km">Kilometers</option><option value="cm">Centimeters</option><option value="ft">Feet</option><option value="mi">Miles</option></select><label for="toUnit">To</label><select id="toUnit"><option value="km">Kilometers</option><option value="m">Meters</option><option value="cm">Centimeters</option><option value="ft">Feet</option><option value="mi">Miles</option></select>`+btn("Convert length");break;
+ case "json":f=area("JSON input","a","Paste JSON here")+btn("Format JSON");break;
+ case "url":f=area("Text or URL-encoded text","a")+`<label for="urlmode">Action</label><select id="urlmode"><option value="encode">Encode</option><option value="decode">Decode</option></select>`+btn("Convert");break;
+ case "imgcompress":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*"><label for="quality">JPEG/WebP quality (0.1–1)</label><input id="quality" type="number" min="0.1" max="1" step="0.1" value="0.75"><p class="small">PNG compression may not reduce file size much. Images are processed in your browser.</p>`+btn("Compress image");break;
+ case "imgresize":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*">`+field("Width in pixels","width","number","e.g. 800")+field("Height in pixels","height","number","e.g. 600")+`<label><input id="keepRatio" type="checkbox" checked style="width:auto;margin-right:8px">Keep aspect ratio</label><br>`+btn("Resize image");break;
+ case "imgconvert":f=`<label for="imageFile">Choose an image</label><input id="imageFile" type="file" accept="image/*"><label for="format">Output format</label><select id="format"><option value="image/png">PNG</option><option value="image/jpeg">JPEG</option><option value="image/webp">WebP</option></select>`+btn("Convert image");break;
+ case "caption":f=field("Topic or post subject","a","text","e.g. easy healthy breakfast")+`<label for="tone">Tone</label><select id="tone"><option>Friendly</option><option>Funny</option><option>Professional</option><option>Inspirational</option></select>`+btn("Generate caption ideas");break;
+ case "hashtags":f=field("Topic or niche","a","text","e.g. home workouts")+btn("Suggest hashtags");break;
+ case "bio":f=field("Name or brand","a","text","e.g. Daily Fit Tips")+field("Niche / what you do","b","text","e.g. simple fitness advice")+btn("Generate bio");break;
+ case "ytitles":f=field("Video topic","a","text","e.g. beginner meal prep")+btn("Generate title ideas");break;
+ case "postideas":f=field("Topic or niche","a","text","e.g. personal finance")+btn("Generate post ideas");break;
+ case "password":f=field("Password length (8–64)","a","number","16",'min="8" max="64" value="16"')+`<label><input id="symbols" type="checkbox" checked style="width:auto;margin-right:8px">Include symbols</label><br>`+btn("Generate password");break;
+ }
+ $("toolForm").innerHTML=f;$("workspace").hidden=false;$("workspace").scrollIntoView({behavior:"smooth",block:"start"});$("run").onclick=runTool;
+}
+function show(html){$("output").innerHTML=html;$("output").hidden=false;}
+function num(id){return Number($(id).value);}
 
-  const root = document.getElementById("gtooli-calculator");
-  if (!root || root.dataset.initialized === "true") return;
-  root.dataset.initialized = "true";
+function referenceBox(items,note="Estimates are educational only and are not a diagnosis or individualized medical advice.") {
+ return `<details class="reference-box"><summary><b>Sources &amp; notes</b></summary><p class="medical-note">${note}</p><ul>${items.map(x=>`<li><a href="${x[1]}" target="_blank" rel="noopener noreferrer">${x[0]}</a></li>`).join("")}</ul></details>`;
+}
+function meter(value,min,max,segments,axisLabels){
+ const pct=Math.max(0,Math.min(100,(value-min)/(max-min)*100));
+ return `<div class="meter-wrap" role="img" aria-label="Result meter, marker at ${pct.toFixed(0)} percent of the displayed scale"><div class="meter-track">${segments.map(x=>`<span class="meter-seg" style="width:${x[0]}%;background:${x[1]}"></span>`).join("")}<span class="meter-needle" style="left:${pct}%"></span></div><div class="meter-axis"><span>${axisLabels[0]}</span><span>${axisLabels[1]}</span><span>${axisLabels[2]}</span></div></div>`;
+}
+function stat(label,value){return `<div class="health-stat"><strong>${value}</strong><span>${label}</span></div>`;}
+function validPositive(id){return $(id).value!==""&&Number.isFinite(Number($(id).value))&&Number($(id).value)>0;}
+function medicalReferences(kind){
+ const refs={
+ bmi:[["CDC — Adult BMI categories","https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html"],["WHO — Obesity and overweight","https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"]],
+ bmr:[["Mifflin et al. — Original resting energy expenditure equation (1990)","https://pubmed.ncbi.nlm.nih.gov/2305711/"]],
+ wthr:[["NHS — Keep your waist to less than half your height","https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio/"]],
+ pregnancy:[["NHS — Pregnancy due date calculator","https://www.nhs.uk/pregnancy/finding-out/due-date-calculator/"]],
+ heart:[["American Heart Association — Target heart rates","https://www.heart.org/en/healthy-living/fitness/fitness-basics/target-heart-rates"]],
+ water:[["National Academies — Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate","https://nap.nationalacademies.org/catalog/10925/dietary-reference-intakes-for-water-potassium-sodium-chloride-and-sulfate"]]
+ };
+ return referenceBox(refs[kind]||[],kind==="water"?"The ml/kg figure is a rough planning heuristic, not an official universal requirement. Needs vary with climate, activity, pregnancy, medicines and medical conditions. Follow clinician guidance if you have fluid restrictions.":"The result is an estimate and should be interpreted in context. It is not a diagnosis or a substitute for advice from a qualified healthcare professional.");
+}
+function calendarParts(start,end){
+ const addMonthsClamped=(date,months)=>{
+  const target=new Date(date);
+  const day=target.getDate();
+  target.setDate(1);
+  target.setMonth(target.getMonth()+months);
+  const lastDay=new Date(target.getFullYear(),target.getMonth()+1,0).getDate();
+  target.setDate(Math.min(day,lastDay));
+  return target;
+ };
+ let years=end.getFullYear()-start.getFullYear();
+ let cursor=addMonthsClamped(start,years*12);
+ if(cursor>end){years--;cursor=addMonthsClamped(start,years*12);}
+ let months=0;
+ while(months<11){const next=addMonthsClamped(cursor,1);if(next>end)break;cursor=next;months++;}
+ const remaining=end-cursor;
+ const days=Math.floor(remaining/86400000);
+ const afterDays=remaining-days*86400000;
+ const hours=Math.floor(afterDays/3600000);
+ const minutes=Math.floor((afterDays%3600000)/60000);
+ const seconds=Math.floor((afterDays%60000)/1000);
+ return {years,months,days,hours,minutes,seconds};
+}
+function runTool(){
+ const a=$("a")?.value??"";
+ switch(current.id){
+ case "words":{const words=a.trim()?a.trim().split(/\s+/u).length:0;const chars=a.length,noSpaces=a.replace(/\s/g,"").length;const sentences=(a.match(/[.!?]+(?=\s|$)/g)||[]).length;show(`<b>Words:</b> ${words}<br><b>Characters:</b> ${chars}<br><b>Characters (no spaces):</b> ${noSpaces}<br><b>Sentences (approx.):</b> ${sentences}`);break;}
+ case "case":{const mode=$("mode").value;let s=a;if(mode==="upper")s=a.toUpperCase();if(mode==="lower")s=a.toLowerCase();if(mode==="title")s=a.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(mode==="sentence")s=a.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
+ case "duplicates":{const lines=a.split(/\r?\n/),seen=new Set();const result=lines.filter(line=>{const key=line.trim();if(!key||seen.has(key))return false;seen.add(key);return true;}).join("\n");show(`<textarea id="copyText">${esc(result)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
+ case "clean":{const s=a.split(/\r?\n/).map(x=>x.replace(/[ \t]+/g," ").trim()).filter(Boolean).join("\n");show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
+ case "percent":{const p=num("a"),v=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(p)||!Number.isFinite(v)){show("Enter valid numbers.");break;}show(`${p}% of ${v} = <b>${(p/100*v).toLocaleString(undefined,{maximumFractionDigits:6})}</b>`);break;}
+ case "discount":{const price=num("a"),d=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(price)||!Number.isFinite(d)||price<0||d<0||d>100){show("Enter a non-negative price and a discount from 0 to 100%.");break;}show(`Sale price: <b>${(price*(1-d/100)).toFixed(2)}</b><br>You save: ${(price*d/100).toFixed(2)}`);break;}
+ case "age":{const value=$("a").value,birth=new Date(value+"T00:00:00"),now=new Date();if(!value||Number.isNaN(birth.getTime())||birth>now){show("Enter a valid birth date in the past.");break;}let age=now.getFullYear()-birth.getFullYear();const beforeBirthday=now.getMonth()<birth.getMonth()||(now.getMonth()===birth.getMonth()&&now.getDate()<birth.getDate());if(beforeBirthday)age--;show(`Your age is <b>${age} years</b>.`);break;}
+ case "slug":{const s=a.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");show(`<input id="copyText" value="${esc(s)}" readonly><button class="action" id="copy">Copy slug</button>`);bindCopy();break;}
+ case "reverse":{const s=Array.from(a).reverse().join("");show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();break;}
+ case "linecount":{const lines=a.length?a.split(/\r?\n/).length:0;show(`Lines: <b>${lines}</b><br>Non-empty lines: <b>${a.split(/\r?\n/).filter(x=>x.trim()).length}</b>`);break;}
+ case "change":{const old=num("a"),next=num("b");if($("a").value===""||$("b").value===""||!Number.isFinite(old)||!Number.isFinite(next)||old===0){show("Enter valid values; original value must not be zero.");break;}const pct=((next-old)/Math.abs(old))*100;show(`Percentage change: <b>${pct.toFixed(2)}%</b><br>${pct>0?"Increase":pct<0?"Decrease":"No change"}`);break;}
+ case "bmi":{
+  const w=num("a"),h=num("b")/100;
+  if($("a").value===""||$("b").value===""||!Number.isFinite(w)||!Number.isFinite(h)||w<=0||h<=0){show("Enter positive weight and height values.");break;}
+  const bmi=w/(h*h),category=bmi<18.5?"Underweight":bmi<25?"Healthy weight range":bmi<30?"Overweight range":bmi<35?"Obesity class 1 range":bmi<40?"Obesity class 2 range":"Obesity class 3 range";
+  const clamped=Math.max(10,Math.min(50,bmi));
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${bmi.toFixed(1)}</span><span class="metric-unit">BMI · kg/m²</span></div>${meter(clamped,10,50,[[21.25,"#60a5fa"],[16.25,"#34d399"],[12.5,"#fbbf24"],[12.5,"#fb923c"],[37.5,"#fb7185"]],["10","18.5","50+"])}<p><b>Adult screening category:</b> ${category}</p><div class="meter-legend"><span>Blue: Underweight</span><span>Green: Healthy range</span><span>Amber: Overweight</span><span>Orange/red: Obesity ranges</span></div><p class="medical-note">Standard adult BMI categories apply to adults aged 20 and older. BMI is a screening measure, not a diagnosis; it does not directly measure body fat or overall health.</p>${medicalReferences("bmi")}</div>`);break;
+ }
+ case "bmr":{
+  const age=num("a"),weight=num("b"),height=num("c"),sex=$("sex").value,activity=num("activity");
+  if(["a","b","c"].some(id=>$(id).value.trim()==="")||!Number.isFinite(age)||!Number.isFinite(weight)||!Number.isFinite(height)||age<18||age>100||weight<=0||height<=0){show("Enter a valid age (18–100), positive weight and positive height.");break;}
+  const bmr=10*weight+6.25*height-5*age+(sex==="male"?5:-161),tdee=bmr*activity;
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${Math.round(bmr).toLocaleString()}</span><span class="metric-unit">estimated resting calories/day (BMR)</span></div><div class="health-stats">${stat("Estimated maintenance calories/day",Math.round(tdee).toLocaleString()+" kcal")}${stat("Activity multiplier",activity.toFixed(3))}</div><p class="medical-note">Estimate using the Mifflin–St Jeor equation. The sex constant is an equation setting, not a measure of gender identity. Actual needs vary; this is not medical advice.</p>${medicalReferences("bmr")}</div>`);break;
+ }
+ case "water":{
+  const weight=num("a"),factor=num("waterFactor");if(!validPositive("a")){show("Enter a positive body weight in kilograms.");break;}
+  const ml=weight*factor;show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${(ml/1000).toFixed(2)} L</span><span class="metric-unit">estimated fluids per day</span></div><div class="health-stats">${stat("Millilitres",Math.round(ml).toLocaleString()+" ml")}${stat("Approx. 250 ml cups",(ml/250).toFixed(1))}</div>${medicalReferences("water")}</div>`);break;
+ }
+ case "idealweight":{
+  const cm=num("a");if(!validPositive("a")||cm<100||cm>250){show("Enter a height from 100 to 250 cm.");break;}
+  const h=cm/100,low=18.5*h*h,high=24.9*h*h;show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${low.toFixed(1)}–${high.toFixed(1)} kg</span><span class="metric-unit">BMI-based adult reference range</span></div><p>For a height of ${cm} cm, the approximate weight corresponding to BMI 18.5–24.9 is ${low.toFixed(1)} to ${high.toFixed(1)} kg.</p><p class="medical-note">This is a rough adult screening range, not a personalized goal. It is not intended for children or pregnancy.</p>${medicalReferences("bmi")}</div>`);break;
+ }
+ case "wthr":{
+  const waist=num("a"),height=num("b");if(!validPositive("a")||!validPositive("b")||waist>300||height>300){show("Enter valid positive waist and height measurements in centimetres.");break;}
+  const ratio=waist/height,category=ratio<0.4?"Lower than the usual healthy range":ratio<0.5?"Generally lower-risk range":ratio<0.6?"Increased health risk range":"Higher health risk range";
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${ratio.toFixed(2)}</span><span class="metric-unit">waist ÷ height</span></div><p><b>Screening interpretation:</b> ${category}</p><p>Waist-to-height ratio is most simply interpreted as aiming to keep your waist measurement below half your height.</p>${medicalReferences("wthr")}</div>`);break;
+ }
+ case "heartrate":{
+  const age=num("a");if($("a").value===""||!Number.isInteger(age)||age<18||age>100){show("Enter a whole-number age from 18 to 100.");break;}
+  const max=220-age,moderateLow=Math.round(max*.5),moderateHigh=Math.round(max*.7),vigorousLow=Math.round(max*.7),vigorousHigh=Math.round(max*.85);
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${max} bpm</span><span class="metric-unit">estimated maximum heart rate</span></div><div class="health-stats">${stat("Moderate intensity (50–70%)",`${moderateLow}–${moderateHigh} bpm`)}${stat("Vigorous intensity (70–85%)",`${vigorousLow}–${vigorousHigh} bpm`)}</div><p class="medical-note">Age-based estimates only. Medicines, fitness and health conditions can change safe exercise targets. Stop and seek medical advice if you feel unwell.</p>${medicalReferences("heart")}</div>`);break;
+ }
+ case "pregnancy":{
+  const value=$("a").value,cycle=num("b");if(!value||!Number.isInteger(cycle)||cycle<20||cycle>45){show("Enter a valid last menstrual period date and cycle length from 20 to 45 days.");break;}
+  const lmp=new Date(value+"T12:00:00");const today=new Date();today.setHours(23,59,59,999);if(Number.isNaN(lmp.getTime())||lmp>today){show("The last menstrual period date cannot be in the future.");break;}
+  const due=new Date(lmp);due.setDate(due.getDate()+280+(cycle-28));const fmt=d=>d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${esc(fmt(due))}</span><span class="metric-unit">estimated due date</span></div><p>Based on the first day of the last menstrual period and a ${cycle}-day cycle.</p><p class="medical-note">This is an estimate, not a diagnosis. A clinician or ultrasound may revise the date. Seek professional prenatal care.</p>${medicalReferences("pregnancy")}</div>`);break;
+ }
+ case "macros":{
+  const calories=num("a"),p=num("proteinPct"),c=num("carbPct"),f=num("fatPct");if(!validPositive("a")||![p,c,f].every(Number.isFinite)||[p,c,f].some(v=>v<0||v>100)||Math.abs(p+c+f-100)>.01){show("Enter positive daily calories and macro percentages between 0 and 100 that add up to exactly 100%.");break;}
+  const pg=calories*p/100/4,cg=calories*c/100/4,fg=calories*f/100/9;
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${Math.round(calories).toLocaleString()} kcal</span><span class="metric-unit">daily calorie target</span></div><div class="health-stats">${stat(`Protein (${p}%)`,`${pg.toFixed(1)} g/day`)}${stat(`Carbohydrates (${c}%)`,`${cg.toFixed(1)} g/day`)}${stat(`Fat (${f}%)`,`${fg.toFixed(1)} g/day`)}</div><p class="medical-note">Calculated using 4 kcal/g for protein and carbohydrates, and 9 kcal/g for fat. The appropriate split depends on individual needs.</p></div>`);break;
+ }
+ case "datediff":{
+  const startValue=$("a").value,endValue=$("b").value;if(!startValue||!endValue){show("Choose both a start and an end date/time.");break;}
+  const start=new Date(startValue),end=new Date(endValue);if(Number.isNaN(start.getTime())||Number.isNaN(end.getTime())){show("Enter valid start and end date/time values.");break;}if(end<start){show("End date/time must be on or after the start date/time.");break;}
+  const ms=end-start,totalSeconds=Math.floor(ms/1000),days=Math.floor(totalSeconds/86400),hours=Math.floor((totalSeconds%86400)/3600),minutes=Math.floor((totalSeconds%3600)/60),seconds=totalSeconds%60,parts=calendarParts(start,end);
+  show(`<div class="health-result"><div class="metric-hero"><span class="metric-value">${days.toLocaleString()} days</span><span class="metric-unit">total elapsed time</span></div><div class="health-stats">${stat("Calendar difference",`${parts.years} y · ${parts.months} mo · ${parts.days} d`)}${stat("Time remainder",`${hours} h · ${minutes} min · ${seconds} sec`)}${stat("Total hours",(ms/3600000).toLocaleString(undefined,{maximumFractionDigits:2}))}${stat("Total minutes",Math.floor(ms/60000).toLocaleString())}</div><p>From ${esc(start.toLocaleString())} to ${esc(end.toLocaleString())}.</p></div>`);break;
+ }
+ case "length":{const factors={m:1,km:1000,cm:.01,ft:.3048,mi:1609.344};const v=num("a");if($("a").value===""||!Number.isFinite(v)){show("Enter a valid number.");break;}const result=v*factors[$("fromUnit").value]/factors[$("toUnit").value];show(`<b>${v} ${$("fromUnit").selectedOptions[0].text}</b> = ${result.toLocaleString(undefined,{maximumFractionDigits:8})} ${$("toUnit").selectedOptions[0].text}`);break;}
+ case "json":{try{const obj=JSON.parse(a);const formatted=JSON.stringify(obj,null,2);show(`<textarea id="copyText">${esc(formatted)}</textarea><button class="action" id="copy">Copy formatted JSON</button>`);bindCopy();}catch(e){show("Invalid JSON: "+esc(e.message));}break;}
+ case "url":{try{const s=$("urlmode").value==="encode"?encodeURIComponent(a):decodeURIComponent(a);show(`<textarea id="copyText">${esc(s)}</textarea><button class="action" id="copy">Copy result</button>`);bindCopy();}catch(e){show("Could not decode this input. Check that percent-encoding is valid.");}break;}
+ case "caption":{if(!a.trim()){show("Enter a topic first.");break;}const tone=$("tone").value;const drafts={
+"Friendly":[`Let's talk about ${a.trim()} 💛 What has your experience been? Share below!`,`A little reminder about ${a.trim()}: small steps count. Save this for later!`],
+"Funny":[`Me trying to master ${a.trim()} like it's a full-time job 😂 Who can relate?`,`Plot twist: ${a.trim()} doesn't have to be complicated. Send this to a friend!`],
+"Professional":[`A practical look at ${a.trim()}: focus on the basics, stay consistent, and adjust to your goals.`,`Here are a few things worth knowing about ${a.trim()}. Which would you add?`],
+"Inspirational":[`Your next step with ${a.trim()} doesn't need to be perfect. It just needs to begin. ✨`,`Progress is built one choice at a time. Keep going with ${a.trim()} 💫`]};
+show(`<textarea id="copyText">${esc(drafts[tone].join("\n\n"))}</textarea><button class="action" id="copy">Copy captions</button><p class="small">Template-based suggestions; personalize before posting.</p>`);bindCopy();break;}
+ case "hashtags":{if(!a.trim()){show("Enter a topic first.");break;}const tags=a.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s]/g,"").trim().split(/\s+/).filter(Boolean);const base=[...new Set([...tags, tags.join(""),"tips","daily","community","learn","inspiration","howto","ideas","explore","creator"])].slice(0,15).map(t=>"#"+t.replace(/\s/g,""));show(`<textarea id="copyText">${esc(base.join(" "))}</textarea><button class="action" id="copy">Copy hashtags</button><p class="small">Hashtags are simple suggestions, not live trend data.</p>`);bindCopy();break;}
+ case "bio":{const brand=a.trim(),niche=$("b").value.trim();if(!brand||!niche){show("Enter both a name/brand and a niche.");break;}const bios=[`${brand} | ${niche} ✨\nSharing tips, ideas & everyday inspiration.\nFollow along for more ↓`,`Welcome to ${brand} 💡\nMaking ${niche} easier, one post at a time.`,`Your daily dose of ${niche} 🌿\nUseful ideas • Simple tips • Real progress`];show(`<textarea id="copyText">${esc(bios.join("\n\n"))}</textarea><button class="action" id="copy">Copy bios</button>`);bindCopy();break;}
+ case "ytitles":{if(!a.trim()){show("Enter a video topic first.");break;}const t=a.trim();const titles=[`How to Get Started With ${t}`,`${t}: 7 Things Beginners Should Know`,`I Tried ${t} — Here's What I Learned`,`The Simple Guide to ${t}`,`Stop Making These ${t} Mistakes`,`What Nobody Tells You About ${t}`,`${t} Made Easy: Step-by-Step`];show(`<textarea id="copyText">${esc(titles.join("\n"))}</textarea><button class="action" id="copy">Copy titles</button>`);bindCopy();break;}
+ case "postideas":{if(!a.trim()){show("Enter a topic first.");break;}const t=a.trim();const ideas=[`5 common mistakes people make with ${t}`,`Beginner's checklist for ${t}`,`Myth vs. fact: ${t}`,`A step-by-step guide to ${t}`,`3 quick tips about ${t}`,`Things I wish I knew earlier about ${t}`,`Answer a frequently asked question about ${t}`,`A personal story or lesson related to ${t}`,`Tools and resources that help with ${t}`,`Ask your audience their biggest challenge with ${t}`];show(`<textarea id="copyText">${esc(ideas.join("\n"))}</textarea><button class="action" id="copy">Copy ideas</button>`);bindCopy();break;}
+ case "imgcompress":
+ case "imgresize":
+ case "imgconvert":{const file=$("imageFile").files[0];if(!file){show("Choose an image file first.");break;}if(!file.type.startsWith("image/")){show("Please choose a valid image.");break;}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight;if(current.id==="imgresize"){const nw=Number($("width").value),nh=Number($("height").value);if(!Number.isInteger(nw)||!Number.isInteger(nh)||nw<1||nh<1||nw>10000||nh>10000){show("Enter dimensions from 1 to 10000 pixels.");return;}if($("keepRatio").checked){const ratio=Math.min(nw/w,nh/h);w=Math.max(1,Math.round(w*ratio));h=Math.max(1,Math.round(h*ratio));}else{w=nw;h=nh;}}const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d");if(current.id==="imgconvert"&&$("format").value==="image/jpeg"){ctx.fillStyle="#ffffff";ctx.fillRect(0,0,w,h);}ctx.drawImage(img,0,0,w,h);const type=current.id==="imgconvert"?$("format").value:(current.id==="imgcompress"?"image/jpeg":"image/png");const quality=current.id==="imgcompress"?Math.min(1,Math.max(.1,Number($("quality").value)||.75)):.85;canvas.toBlob(blob=>{if(!blob){show("Could not process this image format in your browser.");return;}const url=URL.createObjectURL(blob);const ext=type==="image/jpeg"?"jpg":type==="image/webp"?"webp":"png";show(`<p>Original: ${(file.size/1024).toFixed(1)} KB<br>Output: ${(blob.size/1024).toFixed(1)} KB<br>Dimensions: ${w} × ${h}</p><img src="${url}" alt="Processed image preview" style="max-width:100%;height:auto;border-radius:8px"><p><a class="action" style="display:inline-block" href="${url}" download="gtooli-image.${ext}">Download image</a></p><p class="small">Processing happens in your browser. Check the output before using it.</p>`);},type,quality);};img.onerror=()=>show("Could not read this image. Try another file.");img.src=reader.result;};reader.onerror=()=>show("Could not read the selected file.");reader.readAsDataURL(file);break;}
+ case "password":{const length=num("a");if(!Number.isInteger(length)||length<8||length>64){show("Choose a whole number from 8 to 64.");break;}const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"+($("symbols").checked?"!@#$%&*-_+=":"");const bytes=new Uint32Array(length);crypto.getRandomValues(bytes);let s="";for(const n of bytes)s+=chars[n%chars.length];show(`<p>Your password:</p><input id="copyText" value="${esc(s)}" readonly><button class="action" id="copy">Copy password</button><p class="small">Save your password securely. Do not reuse it across accounts.</p>`);bindCopy();break;}
+ }
+}
+function bindCopy(){$("copy").onclick=()=>navigator.clipboard.writeText($("copyText").value).then(()=>alert("Copied!")).catch(()=>alert("Select and copy manually."));}
 
-  const display = root.querySelector("#gtooli-display");
-  const themeSelect = root.querySelector("#gtooli-theme");
-
-  let current = "0";
-  let stored = null;
-  let pending = null;
-  let waiting = false;
-  let justCalculated = false;
-
-  const themes = {
-    default: {
-      body: "#5b5b60",
-      button: "#f5f5f5",
-      buttonText: "#333333",
-      display: "#cbd0dc",
-      accent: "#f28c28",
-      text: "#ffffff"
-    },
-    blue: {
-      body: "#174b70",
-      button: "#e5f3ff",
-      buttonText: "#173b55",
-      display: "#c4e5fa",
-      accent: "#00a8e8",
-      text: "#ffffff"
-    },
-    green: {
-      body: "#286247",
-      button: "#e5f5e9",
-      buttonText: "#214a31",
-      display: "#c8e5cd",
-      accent: "#f2a93b",
-      text: "#ffffff"
-    },
-    purple: {
-      body: "#563d79",
-      button: "#f1e8ff",
-      buttonText: "#392454",
-      display: "#ddd0f2",
-      accent: "#ff9dcb",
-      text: "#ffffff"
-    },
-    red: {
-      body: "#8c3038",
-      button: "#fff0ef",
-      buttonText: "#5c2025",
-      display: "#f3d0ce",
-      accent: "#ffad42",
-      text: "#ffffff"
-    },
-    black: {
-      body: "#202124",
-      button: "#3c4043",
-      buttonText: "#ffffff",
-      display: "#d9dde5",
-      accent: "#f28c28",
-      text: "#ffffff"
-    },
-    light: {
-      body: "#d8dbe2",
-      button: "#ffffff",
-      buttonText: "#252525",
-      display: "#ffffff",
-      accent: "#3478db",
-      text: "#222222"
-    }
-  };
-
-  function applyTheme(name) {
-    const theme = themes[name] || themes.default;
-    const styles = {
-      "--calc-body": theme.body,
-      "--calc-button": theme.button,
-      "--calc-button-text": theme.buttonText,
-      "--calc-display": theme.display,
-      "--calc-accent": theme.accent,
-      "--calc-text": theme.text
-    };
-
-    Object.keys(styles).forEach(function (key) {
-      root.style.setProperty(key, styles[key]);
-    });
-  }
-
-  function formatNumber(number) {
-    if (!Number.isFinite(number)) return "Error";
-    if (Object.is(number, -0)) number = 0;
-
-    // Avoid long floating-point results such as 0.30000000000000004.
-    const rounded = Number(number.toPrecision(12));
-    let result = String(rounded);
-
-    // Use scientific notation only for extremely long values.
-    if (result.length > 15) {
-      result = rounded.toExponential(6);
-    }
-
-    return result;
-  }
-
-  function updateDisplay() {
-    display.textContent = current;
-    display.title = current;
-  }
-
-  function reset() {
-    current = "0";
-    stored = null;
-    pending = null;
-    waiting = false;
-    justCalculated = false;
-    updateDisplay();
-  }
-
-  function inputDigit(digit) {
-    if (current === "Error" || waiting || justCalculated) {
-      current = digit;
-      waiting = false;
-      justCalculated = false;
-    } else if (current === "0") {
-      current = digit;
-    } else if (current === "-0") {
-      current = "-" + digit;
-    } else if (current.replace("-", "").replace(".", "").length < 14) {
-      current += digit;
-    }
-
-    updateDisplay();
-  }
-
-  function inputDecimal() {
-    if (current === "Error" || waiting || justCalculated) {
-      current = "0.";
-      waiting = false;
-      justCalculated = false;
-    } else if (!current.includes(".")) {
-      current += ".";
-    }
-
-    updateDisplay();
-  }
-
-  function calculate(a, b, operator) {
-    switch (operator) {
-      case "+": return a + b;
-      case "−": return a - b;
-      case "×": return a * b;
-      case "÷": return b === 0 ? NaN : a / b;
-      default: return b;
-    }
-  }
-
-  function inputOperator(operator) {
-    if (current === "Error") reset();
-
-    const value = Number(current);
-
-    if (pending && !waiting) {
-      const result = calculate(stored, value, pending);
-      current = formatNumber(result);
-
-      if (current === "Error") {
-        stored = null;
-        pending = null;
-        waiting = true;
-        justCalculated = true;
-        updateDisplay();
-        return;
+// Classic calculator interactions
+(function(){
+  const display=document.getElementById("calcDisplay"), expression=document.getElementById("calcExpression");
+  const keys=document.getElementById("calcKeys"), colorInput=document.getElementById("calcColor");
+  if(!display||!keys)return;
+  let entry="0", stored=null, operator=null, waiting=false, justEvaluated=false;
+  const pretty=n=>{if(!Number.isFinite(n))return "Error";return Number(n.toPrecision(12)).toLocaleString(undefined,{maximumFractionDigits:10});};
+  const paint=()=>{display.textContent=entry;};
+  const reset=()=>{entry="0";stored=null;operator=null;waiting=false;justEvaluated=false;expression.textContent="Ready for your calculation";paint();};
+  const calculate=(a,b,op)=>{switch(op){case "+":return a+b;case "−":return a-b;case "×":return a*b;case "÷":return b===0?NaN:a/b;default:return b;}};
+  function press(kind,value){
+    if(kind==="clear"){reset();return;}
+    if(kind==="digit"){
+      if(waiting||justEvaluated){entry=value;waiting=false;justEvaluated=false;}else entry=entry==="0"?value:entry+value;
+    }else if(kind==="decimal"){
+      if(waiting||justEvaluated){entry="0.";waiting=false;justEvaluated=false;}else if(!entry.includes("."))entry+=".";
+    }else if(kind==="delete"){
+      if(waiting||justEvaluated){entry="0";waiting=false;justEvaluated=false;}else entry=entry.length>1?entry.slice(0,-1):"0";
+    }else if(kind==="percent"){
+      const n=Number(entry);entry=String(n/100);justEvaluated=false;
+    }else if(kind==="op"){
+      const n=Number(entry);
+      if(operator&&!waiting){const r=calculate(stored,n,operator);entry=String(r);stored=r;}
+      else stored=n;
+      operator=value;waiting=true;justEvaluated=false;expression.textContent=pretty(stored)+" "+operator;
+    }else if(kind==="equals"){
+      if(operator!==null&&stored!==null&&!waiting){
+        const a=stored,b=Number(entry),op=operator,r=calculate(a,b,op);
+        expression.textContent=pretty(a)+" "+op+" "+pretty(b)+" =";
+        entry=Number.isFinite(r)?String(r):"Cannot divide by zero";
+        stored=null;operator=null;waiting=false;justEvaluated=true;
       }
-
-      stored = Number(current);
-    } else {
-      stored = value;
     }
-
-    pending = operator;
-    waiting = true;
-    justCalculated = false;
-    updateDisplay();
+    paint();
+    if(document.getElementById("calcSound")?.checked&&"vibrate" in navigator)navigator.vibrate(8);
   }
-
-  function equals() {
-    if (pending === null || stored === null || waiting) return;
-
-    const result = calculate(stored, Number(current), pending);
-    current = formatNumber(result);
-    stored = null;
-    pending = null;
-    waiting = true;
-    justCalculated = true;
-    updateDisplay();
-  }
-
-  function inputPercent() {
-    if (current === "Error") return;
-
-    const value = Number(current);
-    current = formatNumber(value / 100);
-    waiting = false;
-    justCalculated = false;
-    updateDisplay();
-  }
-
-  function toggleSign() {
-    if (current === "Error" || Number(current) === 0) return;
-
-    current = current.startsWith("-")
-      ? current.slice(1)
-      : "-" + current;
-
-    justCalculated = false;
-    updateDisplay();
-  }
-
-  function backspace() {
-    if (current === "Error" || waiting || justCalculated) {
-      current = "0";
-      waiting = false;
-      justCalculated = false;
-    } else if (current.length > 1) {
-      current = current.slice(0, -1);
-      if (current === "-") current = "0";
-    } else {
-      current = "0";
-    }
-
-    updateDisplay();
-  }
-
-  root.querySelector(".calc-grid").addEventListener("click", function (event) {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
-
-    const action = button.dataset.action;
-    const value = button.dataset.value;
-
-    switch (action) {
-      case "digit":
-        inputDigit(value);
-        break;
-      case "decimal":
-        inputDecimal();
-        break;
-      case "operator":
-        inputOperator(value);
-        break;
-      case "equals":
-        equals();
-        break;
-      case "clear":
-        reset();
-        break;
-      case "backspace":
-        backspace();
-        break;
-      case "sign":
-        toggleSign();
-        break;
-      case "percent":
-        inputPercent();
-        break;
-    }
+  keys.addEventListener("click",e=>{const b=e.target.closest("[data-calc]");if(b)press(b.dataset.calc,b.dataset.value);});
+  document.addEventListener("keydown",e=>{
+    if(e.target.matches("input,textarea,select")||document.activeElement?.isContentEditable)return;
+    if(/^[0-9]$/.test(e.key)){press("digit",e.key);}
+    else if(e.key==="."){press("decimal");}
+    else if(e.key==="+"){press("op","+");}
+    else if(e.key==="-"){press("op","−");}
+    else if(e.key==="*"){press("op","×");}
+    else if(e.key==="/"){e.preventDefault();press("op","÷");}
+    else if(e.key==="Enter"||e.key==="="){e.preventDefault();press("equals");}
+    else if(e.key==="Backspace"){press("delete");}
+    else if(e.key==="Escape"){press("clear");}
   });
-
-  themeSelect.addEventListener("change", function () {
-    applyTheme(themeSelect.value);
+  colorInput.addEventListener("input",()=>{
+    const shell=document.getElementById("calcShell");
+    shell.style.setProperty("--calc-accent",colorInput.value);
+    shell.style.setProperty("--calc-accent-dark",colorInput.value);
   });
-
-  // Keyboard controls work when the calculator is visible on the page.
-  document.addEventListener("keydown", function (event) {
-    if (!root.isConnected) return;
-
-    // Do not intercept typing inside other form fields.
-    const target = event.target;
-    if (
-      target &&
-      (target.isContentEditable ||
-       /INPUT|TEXTAREA|SELECT/.test(target.tagName))
-    ) return;
-
-    // Ignore modified shortcuts such as Ctrl+C and Alt combinations.
-    if (event.ctrlKey || event.metaKey || event.altKey) return;
-
-    if (/^[0-9]$/.test(event.key)) {
-      event.preventDefault();
-      inputDigit(event.key);
-    } else if (event.key === ".") {
-      event.preventDefault();
-      inputDecimal();
-    } else if (event.key === "+") {
-      event.preventDefault();
-      inputOperator("+");
-    } else if (event.key === "-") {
-      event.preventDefault();
-      inputOperator("−");
-    } else if (event.key === "*") {
-      event.preventDefault();
-      inputOperator("×");
-    } else if (event.key === "/") {
-      event.preventDefault();
-      inputOperator("÷");
-    } else if (event.key === "Enter" || event.key === "=") {
-      event.preventDefault();
-      equals();
-    } else if (event.key === "Escape") {
-      event.preventDefault();
-      reset();
-    } else if (event.key === "Backspace") {
-      event.preventDefault();
-      backspace();
-    } else if (event.key === "%") {
-      event.preventDefault();
-      inputPercent();
-    }
-  });
-
-  applyTheme("default");
-  updateDisplay();
 })();
+
+// Donation presets are locale-aware where browser regional information is available.
+// This page displays the QR; it does not process payments or verify a transfer.
+(function(){
+  const currency=document.getElementById("supportCurrency"), custom=document.getElementById("supportCustom");
+  const amountButtons=[...document.querySelectorAll(".amount-btn")];
+  let selected=100;
+  const regionMap={"PK":"PKR","US":"USD","GB":"GBP","UK":"GBP","IN":"INR","AE":"AED","SA":"SAR","CA":"CAD","AU":"AUD","DE":"EUR","FR":"EUR","ES":"EUR","IT":"EUR","NL":"EUR","IE":"EUR"};
+  const locale=(navigator.languages&&navigator.languages[0])||navigator.language||"";
+  const region=(locale.match(/[-_]([A-Za-z]{2})$/)||[])[1]?.toUpperCase();
+  if(regionMap[region])currency.value=regionMap[region];
+  const symbols={PKR:"Rs",USD:"$",GBP:"£",EUR:"€",INR:"₹",AED:"AED",SAR:"SAR",CAD:"C$",AUD:"A$"};
+  amountButtons.forEach(b=>b.addEventListener("click",()=>{
+    selected=Number(b.dataset.amount);custom.value="";
+    amountButtons.forEach(x=>x.classList.toggle("selected",x===b));
+  }));
+  custom.addEventListener("input",()=>amountButtons.forEach(x=>x.classList.remove("selected")));
+  currency.addEventListener("change",()=>{
+    // Preset values stay as familiar numeric amounts; only the selected currency changes.
+  });
+  document.getElementById("showSupportQR").addEventListener("click",()=>{
+    const value=custom.value.trim()!==""?Number(custom.value):selected;
+    if(!Number.isFinite(value)||value<=0){custom.focus();custom.setCustomValidity("Enter an amount greater than zero.");custom.reportValidity();return;}
+    custom.setCustomValidity("");
+    const cur=currency.value;
+    const amount=new Intl.NumberFormat(undefined,{maximumFractionDigits:2}).format(value);
+    document.getElementById("qrTitle").textContent="Support amount: "+(symbols[cur]||cur)+" "+amount+" "+cur;
+    document.getElementById("qrInstructions").textContent="Scan the Zindgi QR code with your payment app. Enter "+amount+" "+cur+" in the payment app if it does not fill automatically, and verify recipient details before confirming.";
+    document.getElementById("qrBox").scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  const qr=document.getElementById("zindgiQR"),placeholder=document.getElementById("qrPlaceholder");
+  qr.addEventListener("load",()=>{qr.hidden=false;placeholder.hidden=true;});
+  qr.addEventListener("error",()=>{qr.hidden=true;placeholder.hidden=false;});
+})();
+
+
+// Website-wide settings. The classic calculator has its own isolated color picker.
+(function(){
+ const body=document.body, theme=$("themeSelect"), siteColor=$("siteColor"), language=$("languageSelect");
+ const root=document.documentElement;
+ function setTheme(value){body.dataset.theme=value;}
+ theme.addEventListener("change",()=>setTheme(theme.value));
+ siteColor.addEventListener("input",()=>{
+   root.style.setProperty("--green",siteColor.value);
+   root.style.setProperty("--green-dark",siteColor.value);
+   root.style.setProperty("--accent",siteColor.value);
+   root.style.setProperty("--accent-soft",siteColor.value+"20");
+ });
+ const english={
+   heroTitle:"Everyday tools.",heroSecond:"Absolutely simple.",heroText:"Free online tools to write, calculate, clean text and get things done — all in one simple place.",search:"Search tools...",all:"All tools",text:"Text tools",calculators:"Calculators",utilities:"Utilities",images:"Image tools",creator:"Creator tools",back:"← All tools",open:"Open tool →",supportTitle:"Enjoying GTooli? Support it.",supportButton:"💚 Support GTooli",language:"Language",theme:"Theme"
+ };
+ const urdu={
+   heroTitle:"روزمرہ کے ٹولز۔",heroSecond:"بالکل آسان۔",heroText:"لکھنے، حساب کرنے، متن صاف کرنے اور روزمرہ کاموں کے لیے مفت آن لائن ٹولز۔",search:"ٹول تلاش کریں...",all:"تمام ٹولز",text:"متن کے ٹولز",calculators:"کیلکولیٹرز",utilities:"یوٹیلٹیز",images:"تصاویر کے ٹولز",creator:"مواد بنانے کے ٹولز",back:"← تمام ٹولز",open:"ٹول کھولیں ←",supportTitle:"GTooli پسند آیا؟ تعاون کریں۔",supportButton:"💚 GTooli کی مدد کریں",language:"زبان",theme:"تھیم"
+ };
+ function applyLanguage(lang){
+   uiLanguage=lang;
+   const d=lang==="ur"?urdu:english;
+   document.documentElement.lang=lang;
+   document.documentElement.dir=lang==="ur"?"rtl":"ltr";
+   const h=$(".hero h1");if(h)h.innerHTML=d.heroTitle+"<br><span>"+d.heroSecond+"</span>";
+   const p=document.querySelector(".hero p");if(p)p.textContent=d.heroText;
+   $("search").placeholder=d.search;
+   const labels={All:d.all,Text:d.text,Calculators:d.calculators,Utilities:d.utilities,Images:d.images,Creator:d.creator};
+   document.querySelectorAll("#filters button").forEach(b=>{b.textContent=labels[b.dataset.cat]||b.dataset.cat;});
+   $("back").textContent=d.back;$("classicBack").textContent=d.back;
+   const supportHeading=document.querySelector("#support h2");if(supportHeading)supportHeading.textContent=d.supportTitle;
+   const supportBtn=$("showSupportQR");if(supportBtn)supportBtn.textContent=d.supportButton;
+   document.querySelector('label[for="languageSelect"]').textContent=d.language;
+   document.querySelector('label[for="themeSelect"]').textContent=d.theme;
+   renderCards();
+ }
+ language.addEventListener("change",()=>applyLanguage(language.value));
+})();
+
+
+renderCards();
 </script>
-
-
-   // Full Calculator Suite Data & Handlers
-    const tools = [
-      { id: "percentage", name: "Percentage Calculator", cat: "Calculators", icon: "％", desc: "Calculate a percentage of a number." },
-      { id: "percentage-change", name: "Percentage Change", cat: "Calculators", icon: "📈", desc: "Calculate percentage increase or decrease." },
-      { id: "discount", name: "Discount Calculator", cat: "Calculators", icon: "🏷️", desc: "Find the sale price and savings." },
-      { id: "age", name: "Age Calculator", cat: "Calculators", icon: "🎂", desc: "Calculate age from your birth date." },
-      { id: "bmi", name: "BMI Calculator", cat: "Calculators", icon: "⚖️", desc: "Estimate BMI using height and weight." }
-    ];
-
-    const grid = document.getElementById("tools");
-    const workspace = document.getElementById("workspace");
-    const searchInput = document.getElementById("search");
-
-    function renderTools(filterCat = "All", query = "") {
-      grid.innerHTML = "";
-      const filtered = tools.filter(t => {
-        const matchesCat = filterCat === "All" || t.cat === filterCat;
-        const matchesQuery = t.name.toLowerCase().includes(query.toLowerCase()) || t.desc.toLowerCase().includes(query.toLowerCase());
-        return matchesCat && matchesQuery;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #6b7280;">No tools found.</p>';
-        return;
-      }
-
-      filtered.forEach(t => {
-        const card = document.createElement("div");
-        card.className = "panel";
-        card.style.margin = "0";
-        card.style.cursor = "pointer";
-        card.innerHTML = `
-          <div style="font-size: 28px; margin-bottom: 10px;">${t.icon}</div>
-          <h3 style="margin: 0 0 8px 0; font-size: 18px;">${t.name}</h3>
-          <p style="margin: 0 0 14px 0; color: #4b5563; font-size: 14px;">${t.desc}</p>
-          <span style="color: #10B981; font-weight: bold; font-size: 14px;">Open tool →</span>
-        `;
-        card.onclick = () => openTool(t.id);
-        grid.appendChild(card);
-      });
-    }
-
-    document.querySelectorAll("#filters button").forEach(btn => {
-      btn.onclick = () => {
-        document.querySelector("#filters button.active").classList.remove("active");
-        btn.classList.add("active");
-        renderTools(btn.getAttribute("data-cat"), searchInput.value);
-      };
-    });
-
-    searchInput.oninput = (e) => {
-      const activeCat = document.querySelector("#filters button.active").getAttribute("data-cat");
-      renderTools(activeCat, e.target.value);
-    };
-
-    document.getElementById("back").onclick = () => {
-      workspace.hidden = true;
-      document.querySelector(".hero").style.display = "block";
-      document.getElementById("filters").style.display = "flex";
-      grid.hidden = false;
-    };
-
-    function openTool(id) {
-      document.querySelector(".hero").style.display = "none";
-      document.getElementById("filters").style.display = "none";
-      grid.hidden = true;
-      workspace.hidden = false;
-      const out = document.getElementById("output");
-      out.hidden = true;
-
-      if (id === "percentage") {
-        document.getElementById("toolTitle").innerText = "Percentage Calculator";
-        document.getElementById("toolDescription").innerText = "Calculate a percentage of a number.";
-        document.getElementById("toolForm").innerHTML = `
-          <label>What is</label>
-          <input type="number" id="p1" placeholder="e.g. 20">
-          <label>% of</label>
-          <input type="number" id="p2" placeholder="e.g. 150">
-          <button class="action" id="run">Calculate</button>
-        `;
-        document.getElementById("run").onclick = () => {
-          const a = parseFloat(document.getElementById("p1").value) || 0;
-          const b = parseFloat(document.getElementById("p2").value) || 0;
-          const res = (a * b) / 100;
-          out.hidden = false;
-          out.innerHTML = `<b>Result:</b> ${res}`;
-        };
-      } 
-      else if (id === "percentage-change") {
-        document.getElementById("toolTitle").innerText = "Percentage Change";
-        document.getElementById("toolDescription").innerText = "Calculate percentage increase or decrease.";
-        document.getElementById("toolForm").innerHTML = `
-          <label>Initial Value</label>
-          <input type="number" id="pc1" placeholder="e.g. 100">
-          <label>Final Value</label>
-          <input type="number" id="pc2" placeholder="e.g. 125">
-          <button class="action" id="run">Calculate Change</button>
-        `;
-        document.getElementById("run").onclick = () => {
-          const init = parseFloat(document.getElementById("pc1").value) || 0;
-          const final = parseFloat(document.getElementById("pc2").value) || 0;
-          if (init === 0) return;
-          const diff = final - init;
-          const pct = (diff / init) * 100;
-          out.hidden = false;
-          out.innerHTML = `<b>Percentage Change:</b> ${pct.toFixed(2)}% (${diff >= 0 ? 'Increase' : 'Decrease'})`;
-        };
-      }
-      else if (id === "discount") {
-        document.getElementById("toolTitle").innerText = "Discount Calculator";
-        document.getElementById("toolDescription").innerText = "Find the sale price and savings.";
-        document.getElementById("toolForm").innerHTML = `
-          <label>Original Price</label>
-          <input type="number" id="d-price" placeholder="e.g. 1000">
-          <label>Discount Percentage (%)</label>
-          <input type="number" id="d-pct" placeholder="e.g. 15">
-          <button class="action" id="run">Calculate Discount</button>
-        `;
-        document.getElementById("run").onclick = () => {
-          const price = parseFloat(document.getElementById("d-price").value) || 0;
-          const pct = parseFloat(document.getElementById("d-pct").value) || 0;
-          const saving = (price * pct) / 100;
-          const finalPrice = price - saving;
-          out.hidden = false;
-          out.innerHTML = `<b>Savings:</b> Rs. ${saving.toFixed(2)}<br><b>Final Sale Price:</b> Rs. ${finalPrice.toFixed(2)}`;
-        };
-      }
-      else if (id === "age") {
-        document.getElementById("toolTitle").innerText = "Age Calculator";
-        document.getElementById("toolDescription").innerText = "Calculate exact age from your birth date.";
-        document.getElementById("toolForm").innerHTML = `
-          <label>Birth Date</label>
-          <input type="date" id="birth-date">
-          <button class="action" id="run">Calculate Age</button>
-        `;
-        document.getElementById("run").onclick = () => {
-          const bDate = new Date(document.getElementById("birth-date").value);
-          const today = new Date();
-          if (isNaN(bDate)) return;
-          let years = today.getFullYear() - bDate.getFullYear();
-          let months = today.getMonth() - bDate.getMonth();
-          if (months < 0 || (months === 0 && today.getDate() < bDate.getDate())) {
-            years--;
-            months += 12;
-          }
-          out.hidden = false;
-          out.innerHTML = `<b>Your Age:</b> ${years} years and ${months} months old.`;
-        };
-      }
-      else if (id === "bmi") {
-        document.getElementById("toolTitle").innerText = "BMI Calculator";
-        document.getElementById("toolDescription").innerText = "Estimate BMI using height and weight.";
-        document.getElementById("toolForm").innerHTML = `
-          <label>Height (Inches)</label>
-          <input type="number" id="bmi-in" placeholder="e.g. 70">
-          <label>Weight (Pounds)</label>
-          <input type="number" id="bmi-lb" placeholder="e.g. 160">
-          <button class="action" id="run">Calculate BMI</button>
-        `;
-        document.getElementById("run").onclick = () => {
-          const inches = parseFloat(document.getElementById("bmi-in").value) || 0;
-          const lbs = parseFloat(document.getElementById("bmi-lb").value) || 0;
-          if (inches <= 0 || lbs <= 0) return;
-          const bmi = (703 * lbs) / (inches * inches);
-          let status = "Normal";
-          if (bmi < 18.5) status = "Underweight";
-          else if (bmi >= 25 && bmi < 30) status = "Overweight";
-          else if (bmi >= 30) status = "Obesity";
-          
-          out.hidden = false;
-          out.innerHTML = `<b>BMI:</b> ${bmi.toFixed(1)} kg/m² (${status})`;
-        };
-      }
-    }
-
-    renderTools(); 
-  </script>
 </body>
 </html>
